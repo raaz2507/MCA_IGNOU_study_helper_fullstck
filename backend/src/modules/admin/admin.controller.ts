@@ -8,6 +8,7 @@ import {
 	paperSchema,
 	reportReviewSchema,
 	semesterSchema,
+	shareSettingsSchema,
 	studyMaterialSchema,
 	subjectSchema,
 	newUserDefaultStatusSchema,
@@ -19,6 +20,41 @@ import {
 async function audit(actorId: string, action: string, entityType: string, entityId?: string, details?: object) {
 	await prisma.auditLog.create({ data: { actorId, action, entityType, entityId, details } });
 }
+
+const shareSettingsKey = "share-settings";
+const defaultShareSettings = {
+	title: "Share GyanPath",
+	description: "Scan the QR code or share it with another MCA student.",
+	shareText: "GyanPath - IGNOU MCA study resources",
+	url: "https://mcaignoustudyhelperfullstck-production.up.railway.app/"
+};
+
+export async function readShareSettings() {
+	const setting = await prisma.appSetting.findUnique({ where: { key: shareSettingsKey } });
+	const parsed = shareSettingsSchema.safeParse(setting?.value);
+	return parsed.success ? parsed.data : defaultShareSettings;
+}
+
+export const getShareSettings: RequestHandler = asyncHandler(async (_request, response) => {
+	response.json(await readShareSettings());
+});
+
+export const saveShareSettings: RequestHandler = asyncHandler(async (request, response) => {
+	const input = shareSettingsSchema.parse(request.body);
+	await prisma.appSetting.upsert({
+		where: { key: shareSettingsKey },
+		update: { value: input },
+		create: { key: shareSettingsKey, value: input }
+	});
+	await audit(String(request.user?.id), "SHARE_SETTINGS_UPDATED", "AppSetting", shareSettingsKey, input);
+	response.json(input);
+});
+
+export const deleteShareSettings: RequestHandler = asyncHandler(async (request, response) => {
+	await prisma.appSetting.deleteMany({ where: { key: shareSettingsKey } });
+	await audit(String(request.user?.id), "SHARE_SETTINGS_RESET", "AppSetting", shareSettingsKey);
+	response.status(204).end();
+});
 
 export const getOverview: RequestHandler = asyncHandler(async (_request, response) => {
 	response.json(await adminService.overview());

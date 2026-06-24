@@ -18,6 +18,15 @@ export const saveAnalyticsRetention = (setting) =>
 		method: "PUT",
 		body: JSON.stringify(setting)
 	});
+export const getShareSettings = () =>
+	apiRequest("/admin/settings/share");
+export const saveShareSettings = (setting) =>
+	apiRequest("/admin/settings/share", {
+		method: "PUT",
+		body: JSON.stringify(setting)
+	});
+export const deleteShareSettings = () =>
+	apiRequest("/admin/settings/share", { method: "DELETE" });
 export const updateAdminUserRole = (id, role) =>
 	apiRequest(`/admin/users/${encodeURIComponent(id)}/role`, {
 		method: "PATCH",

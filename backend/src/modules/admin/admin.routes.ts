@@ -17,14 +17,17 @@ import {
 	listReports,
 	listSemesters,
 	listStudyMaterials,
+	getShareSettings,
 	deleteAssignment,
 	deleteSemester,
 	deleteSubject,
+	deleteShareSettings,
 	reviewReport,
 	saveAssignment,
 	saveAnalyticsRetention,
 	saveSemester,
 	savePaper,
+	saveShareSettings,
 	saveStudyMaterial,
 	saveNewUserDefaultStatus,
 	updateUser,
@@ -73,3 +76,6 @@ adminRouter.get("/audit-logs", listAuditLogs);
 adminRouter.get("/system", getSystemStatus);
 adminRouter.get("/settings/analytics-retention", getAnalyticsRetention);
 adminRouter.put("/settings/analytics-retention", saveAnalyticsRetention);
+adminRouter.get("/settings/share", getShareSettings);
+adminRouter.put("/settings/share", saveShareSettings);
+adminRouter.delete("/settings/share", deleteShareSettings);

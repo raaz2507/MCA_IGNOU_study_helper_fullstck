@@ -11,6 +11,13 @@ export const analyticsRetentionSchema = z.object({
 	action: z.enum(["delete", "anonymize"])
 });
 
+export const shareSettingsSchema = z.object({
+	title: z.string().trim().min(2).max(80),
+	description: z.string().trim().min(2).max(220),
+	shareText: z.string().trim().min(2).max(500),
+	url: z.string().trim().url().max(300)
+});
+
 export const userStatusSchema = z.object({
 	status: z.enum(["PENDING", "ACTIVE", "SUSPENDED", "BANNED"])
 });

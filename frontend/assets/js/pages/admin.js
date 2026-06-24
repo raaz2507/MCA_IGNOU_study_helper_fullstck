@@ -2,6 +2,7 @@ import {
 	deleteAdminAssignment,
 	deleteAdminSemester,
 	deleteAdminSubject,
+	deleteShareSettings,
 	getAnalyticsRetention,
 	getAdminAssignments,
 	getAdminAuditLogs,
@@ -12,12 +13,14 @@ import {
 	getAdminSystemStatus,
 	getAdminUsers,
 	getNewUserDefaultStatus,
+	getShareSettings,
 	reviewAdminReport,
 	saveAdminAssignment,
 	saveAdminSemester,
 	saveAdminSubject,
 	saveAnalyticsRetention,
 	saveNewUserDefaultStatus,
+	saveShareSettings,
 	updateAdminUser
 } from "../api/admin.api.js";
 import { getAnalyticsSummary } from "../api/analytics.api.js";
@@ -36,6 +39,15 @@ const retentionDays = document.getElementById("analyticsRetentionDays");
 const cleanupAction = document.getElementById("analyticsCleanupAction");
 const retentionMessage = document.getElementById("analyticsRetentionMessage");
 const subjectSort = document.getElementById("subjectSort");
+const shareSettingsForm = document.getElementById("shareSettingsForm");
+const shareSettingsMessage = document.getElementById("shareSettingsMessage");
+
+const defaultShareSettings = {
+	title: "Share GyanPath",
+	description: "Scan the QR code or share it with another MCA student.",
+	shareText: "GyanPath - IGNOU MCA study resources",
+	url: "https://mcaignoustudyhelperfullstck-production.up.railway.app/"
+};
 
 let users = [];
 let adminSubjects = [];
@@ -216,6 +228,13 @@ function renderSystem(data) {
 		item.innerHTML = `<span>${label}</span><strong>${value}</strong>`;
 		return item;
 	}));
+}
+
+function fillShareSettings(setting = defaultShareSettings) {
+	document.getElementById("shareTitle").value = setting.title;
+	document.getElementById("shareDescription").value = setting.description;
+	document.getElementById("shareText").value = setting.shareText;
+	document.getElementById("shareUrl").value = setting.url;
 }
 
 function emptyCard(text) {
@@ -450,6 +469,13 @@ async function initialize() {
 	}
 
 	try {
+		fillShareSettings(await getShareSettings());
+	} catch (error) {
+		fillShareSettings();
+		setMessage(shareSettingsMessage, `Share settings could not be loaded: ${error.message}`, "error");
+	}
+
+	try {
 		await loadOperations();
 	} catch (error) {
 		setMessage(operationsMessage, `Admin operations could not be loaded: ${error.message}`, "error");
@@ -525,6 +551,30 @@ retentionForm.addEventListener("submit", async (event) => {
 		);
 	} catch (error) {
 		setMessage(retentionMessage, error.message, "error");
+	}
+});
+shareSettingsForm.addEventListener("submit", async (event) => {
+	event.preventDefault();
+	try {
+		const saved = await saveShareSettings({
+			title: document.getElementById("shareTitle").value,
+			description: document.getElementById("shareDescription").value,
+			shareText: document.getElementById("shareText").value,
+			url: document.getElementById("shareUrl").value
+		});
+		fillShareSettings(saved);
+		setMessage(shareSettingsMessage, "Share settings saved.", "success");
+	} catch (error) {
+		setMessage(shareSettingsMessage, error.message, "error");
+	}
+});
+document.getElementById("resetShareSettings").addEventListener("click", async () => {
+	try {
+		await deleteShareSettings();
+		fillShareSettings();
+		setMessage(shareSettingsMessage, "Share settings reset to default.", "success");
+	} catch (error) {
+		setMessage(shareSettingsMessage, error.message, "error");
 	}
 });
 

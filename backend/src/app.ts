@@ -13,6 +13,7 @@ import { progressRouter } from "./modules/progress/progress.routes.js";
 import { contentRouter } from "./modules/content/content.routes.js";
 import { adminRouter } from "./modules/admin/admin.routes.js";
 import { analyticsRouter } from "./modules/analytics/analytics.routes.js";
+import { readShareSettings } from "./modules/admin/admin.controller.js";
 import { errorHandler } from "./shared/middleware/error-handler.js";
 
 const prettyLoggerStream = {
@@ -53,6 +54,14 @@ export function createApp() {
 			status: "ok",
 			service: "gyanpath-express-api",
 			architecture: "express-modular-monolith"
+		});
+	});
+	app.get("/api/share-settings", async (_request, response) => {
+		response.json(await readShareSettings());
+	});
+	app.get("/api/runtime-config", (_request, response) => {
+		response.json({
+			pdfResourceBaseUrl: env.pdfResourceBaseUrl
 		});
 	});
 	app.use("/api/auth", authRouter);

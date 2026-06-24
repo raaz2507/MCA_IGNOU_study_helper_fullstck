@@ -4,7 +4,7 @@
 
 🌐 **IGNOU MCA Study Helper:**
 
-https://raaz2507.github.io/MCA_IGNOU_study_helper/
+https://mcaignoustudyhelperfullstck-production.up.railway.app/
 
 Share the website with MCA students:
 
@@ -12,7 +12,7 @@ Share the website with MCA students:
 >
 > 📚 Question papers, study material, question banks and video lectures in one place.
 >
-> 🔗 https://raaz2507.github.io/MCA_IGNOU_study_helper/
+> 🔗 https://mcaignoustudyhelperfullstck-production.up.railway.app/
 
 ## Run the Node.js Application
 

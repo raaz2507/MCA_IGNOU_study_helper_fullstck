@@ -17,6 +17,7 @@
 				<a href="#adminOverview">📊 Overview</a>
 				<a href="#adminUsers">👥 Users &amp; Roles</a>
 				<a href="#adminContent">📚 Content Control</a>
+				<a href="#adminShare">Share &amp; QR</a>
 				<a href="#adminPrivacy">🛡 Privacy &amp; Retention</a>
 				<a href="#adminSystem">⚙ System Status</a>
 			</nav>
@@ -198,6 +199,25 @@
 				<h3>Reports</h3><div id="adminReports" class="admin-quick-links"></div>
 				<h3>Recent Audit Log</h3><div id="adminAuditLogs" class="admin-system-grid"></div>
 				<p id="adminOperationsMessage" class="admin-message" aria-live="polite"></p>
+			</section>
+
+			<section id="adminShare" class="dashboard-panel">
+				<div class="section-heading">
+					<p class="dashboard-label">Public sharing</p>
+					<h2>Share and QR Settings</h2>
+					<p>Control the message used when students share GyanPath on WhatsApp or Telegram.</p>
+				</div>
+				<form id="shareSettingsForm" class="admin-retention-form">
+					<label><span>Title</span><input id="shareTitle" required maxlength="80" /></label>
+					<label><span>Description</span><input id="shareDescription" required maxlength="220" /></label>
+					<label><span>Share text</span><textarea id="shareText" rows="3" required maxlength="500"></textarea></label>
+					<label><span>Share URL</span><input id="shareUrl" type="url" required /></label>
+					<div class="admin-form-actions">
+						<button class="logout-button" type="submit">Save Share Settings</button>
+						<button id="resetShareSettings" class="secondary-button" type="button">Reset</button>
+					</div>
+					<p id="shareSettingsMessage" class="admin-message" aria-live="polite"></p>
+				</form>
 			</section>
 
 			<section id="adminPrivacy" class="dashboard-panel">

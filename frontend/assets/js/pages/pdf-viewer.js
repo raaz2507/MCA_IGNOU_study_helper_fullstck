@@ -6,6 +6,7 @@
 		en: params.get("en") || params.get("english") || "",
 		hi: params.get("hi") || params.get("hindi") || ""
 	};
+	const defaultPdfResourceBaseUrl = "https://raw.githubusercontent.com/raaz2507/MCA_IGNOU_Study_matarial/main/MCA_new";
 
 	const title = params.get("title") || "PDF Reader";
 	const requestedLanguage = params.get("lang") === "hi" ? "hi" : "en";
@@ -43,6 +44,24 @@
 		});
 	}
 	const themeButtons = [...document.querySelectorAll(".theme-button")];
+
+	async function runtimePdfBaseUrl() {
+		try {
+			const response = await fetch("/api/runtime-config", { cache: "no-store" });
+			if (!response.ok) return defaultPdfResourceBaseUrl;
+			const config = await response.json();
+			return String(config.pdfResourceBaseUrl || defaultPdfResourceBaseUrl).replace(/\/$/, "");
+		} catch {
+			return defaultPdfResourceBaseUrl;
+		}
+	}
+
+	function rewriteLocalResourcePath(source, pdfBaseUrl) {
+		if (!source) return "";
+		const localPrefix = "/local-resources/MCA_new/";
+		if (!source.startsWith(localPrefix)) return source;
+		return `${pdfBaseUrl}/${source.slice(localPrefix.length)}`;
+	}
 
 	documentTitle.textContent = title;
 	document.title = `${title} | PDF Reader`;
@@ -165,9 +184,17 @@
 
 	setTheme(savedTheme || "light");
 
-	if (documents.en || documents.hi) {
+	async function initializeDocuments() {
+		const pdfBaseUrl = await runtimePdfBaseUrl();
+		documents.en = rewriteLocalResourcePath(documents.en, pdfBaseUrl);
+		documents.hi = rewriteLocalResourcePath(documents.hi, pdfBaseUrl);
+
 		loadDocument(currentLanguage);
-		prepareHindiDocument();
+		await prepareHindiDocument();
+	}
+
+	if (documents.en || documents.hi) {
+		initializeDocuments();
 	} else {
 		frame.hidden = true;
 		emptyState.hidden = false;
