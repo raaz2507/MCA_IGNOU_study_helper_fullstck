@@ -15,8 +15,8 @@ async function start() {
 	createSocketServer(server);
 	createQueues(redisReady);
 
-	server.listen(env.port, "127.0.0.1", () => {
-		console.log(`GyanPath Express app: http://127.0.0.1:${env.port}`);
+	server.listen(env.port, "0.0.0.0", () => {
+		console.log(`GyanPath Express app: http://0.0.0.0:${env.port}`);
 	});
 
 	const shutdown = async () => {
