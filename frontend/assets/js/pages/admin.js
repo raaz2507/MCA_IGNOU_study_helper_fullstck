@@ -29,6 +29,7 @@ import {
 	uploadSettingQrImage
 } from "../api/admin.api.js";
 import { getAnalyticsSummary } from "../api/analytics.api.js";
+import { showToast } from "../utils/toast.js";
 
 const statGrid = document.getElementById("adminStats");
 const analyticsStats = document.getElementById("adminAnalyticsStats");
@@ -86,8 +87,12 @@ const roleLabels = {
 };
 
 function setMessage(element, text, type = "") {
+	if (!element) return;
 	element.textContent = text;
 	element.className = `admin-message ${type}`.trim();
+	if (["success", "error", "warning", "info"].includes(type) && text) {
+		showToast(text, type);
+	}
 }
 
 function renderStats(data) {
@@ -675,17 +680,25 @@ async function loadOperations() {
 
 async function initialize() {
 	try {
-		const [overview, userList, system, newUserDefault] = await Promise.all([
-			getAdminOverview(), getAdminUsers(), getAdminSystemStatus(), getNewUserDefaultStatus()
+		const [overview, system] = await Promise.all([
+			getAdminOverview(), getAdminSystemStatus()
 		]);
-		users = userList;
 		renderStats(overview);
-		renderUsers();
 		renderSystem(system);
-		document.getElementById("newUserDefaultStatus").value = newUserDefault.status;
 	} catch (error) {
-		setMessage(userMessage, `Users and roles could not be loaded: ${error.message}`, "error");
+		if (userMessage) setMessage(userMessage, `Admin data could not be loaded: ${error.message}`, "error");
 		return;
+	}
+
+	if (usersBody) {
+		try {
+			const [userList, newUserDefault] = await Promise.all([getAdminUsers(), getNewUserDefaultStatus()]);
+			users = userList;
+			renderUsers();
+			document.getElementById("newUserDefaultStatus").value = newUserDefault.status;
+		} catch (error) {
+			setMessage(userMessage, `Users and roles could not be loaded: ${error.message}`, "error");
+		}
 	}
 
 	try {
@@ -726,8 +739,8 @@ async function initialize() {
 	}
 }
 
-userSearch.addEventListener("input", renderUsers);
-roleFilter.addEventListener("change", renderUsers);
+userSearch?.addEventListener("input", renderUsers);
+roleFilter?.addEventListener("change", renderUsers);
 subjectSort?.addEventListener("change", renderSubjectRows);
 document.getElementById("shareUrl")?.addEventListener("input", updateShareQrPreview);
 document.getElementById("shareQrImageUrl")?.addEventListener("input", updateShareQrPreview);
@@ -753,7 +766,7 @@ document.getElementById("supportQrData")?.addEventListener("input", updateSuppor
 document.querySelectorAll('input[name="supportQrImageSource"]').forEach((input) => {
 	input.addEventListener("change", updateSupportQrPreview);
 });
-document.getElementById("saveNewUserDefaultStatus").addEventListener("click", async () => {
+document.getElementById("saveNewUserDefaultStatus")?.addEventListener("click", async () => {
 	const status = document.getElementById("newUserDefaultStatus").value;
 	await saveNewUserDefaultStatus(status);
 	setMessage(userMessage, `New accounts will default to ${status}.`, "success");

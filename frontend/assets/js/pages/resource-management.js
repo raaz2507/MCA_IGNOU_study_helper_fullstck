@@ -7,6 +7,7 @@ import {
 	saveAdminPaper,
 	saveAdminStudyMaterial
 } from "../api/admin.api.js";
+import { showToast } from "../utils/toast.js";
 
 let subjects = [];
 let studyMaterials = [];
@@ -22,6 +23,9 @@ function showMessage(id, text, type = "") {
 	const message = byId(id);
 	message.textContent = text;
 	message.className = `contributor-message ${type}`.trim();
+	if (["success", "error", "warning", "info"].includes(type) && text) {
+		showToast(text, type);
+	}
 }
 
 function subjectLabel(subjectId) {
@@ -97,9 +101,13 @@ function renderStudyMaterials() {
 			button("Edit", "secondary-button", () => editStudyMaterial(item)),
 			button("Delete", "admin-danger-button", async () => {
 				if (!window.confirm(`Delete study material "${item.title}"?`)) return;
-				await deleteAdminStudyMaterial(item.id);
-				await loadResources();
-				showMessage("studyMaterialMessage", "Study material deleted.", "success");
+				try {
+					await deleteAdminStudyMaterial(item.id);
+					await loadResources();
+					showMessage("studyMaterialMessage", "Study material deleted.", "success");
+				} catch (error) {
+					showMessage("studyMaterialMessage", error.message, "error");
+				}
 			})
 		);
 		row.innerHTML = `
@@ -128,9 +136,13 @@ function renderPapers() {
 			button("Edit", "secondary-button", () => editPaper(item)),
 			button("Delete", "admin-danger-button", async () => {
 				if (!window.confirm(`Delete question paper "${item.title}"?`)) return;
-				await deleteAdminPaper(item.id);
-				await loadResources();
-				showMessage("paperMessage", "Question paper deleted.", "success");
+				try {
+					await deleteAdminPaper(item.id);
+					await loadResources();
+					showMessage("paperMessage", "Question paper deleted.", "success");
+				} catch (error) {
+					showMessage("paperMessage", error.message, "error");
+				}
 			})
 		);
 		row.innerHTML = `

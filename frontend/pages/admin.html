@@ -71,46 +71,11 @@
 				<div class="section-heading">
 					<p class="dashboard-label">Admin only</p>
 					<h2>User and Role Management</h2>
-					<p>Search accounts and assign User, Editor, Moderator or Admin roles.</p>
+					<p>Open the dedicated user dashboard for approvals, roles, audit checks and exports.</p>
 				</div>
-				<div class="admin-user-toolbar">
-					<label>
-						<span>Search users</span>
-						<input id="adminUserSearch" type="search" placeholder="Name, username or email" />
-					</label>
-					<label>
-						<span>Filter by role</span>
-						<select id="adminRoleFilter">
-							<option value="">All roles</option>
-							<option value="ADMIN">Admin</option>
-							<option value="EDITOR">Editor</option>
-							<option value="MODERATOR">Moderator</option>
-							<option value="USER">User</option>
-						</select>
-					</label>
-					<label>
-						<span>New user default status</span>
-						<select id="newUserDefaultStatus">
-							<option value="PENDING">Pending approval</option>
-							<option value="ACTIVE">Active immediately</option>
-						</select>
-					</label>
-					<button id="saveNewUserDefaultStatus" class="logout-button" type="button">Save Default</button>
+				<div class="admin-quick-links">
+					<a href="/admin/users">Open User Management</a>
 				</div>
-				<div class="admin-table-wrap">
-					<table class="admin-user-table">
-						<thead>
-							<tr>
-								<th>User</th>
-								<th>Role &amp; Status</th>
-								<th>Activity</th>
-								<th>Joined</th>
-							</tr>
-						</thead>
-						<tbody id="adminUsersBody"></tbody>
-					</table>
-				</div>
-				<p id="adminUserMessage" class="admin-message" aria-live="polite"></p>
 			</section>
 
 			<section id="adminContent" class="dashboard-panel">

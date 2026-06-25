@@ -60,6 +60,10 @@ export const updateAdminUser = (id, changes) =>
 		method: "PUT",
 		body: JSON.stringify(changes)
 	});
+export const resetAdminUserPassword = (id) =>
+	apiRequest(`/admin/users/${encodeURIComponent(id)}/reset-password`, { method: "POST" });
+export const deleteAdminUser = (id) =>
+	apiRequest(`/admin/users/${encodeURIComponent(id)}`, { method: "DELETE" });
 export const getNewUserDefaultStatus = () =>
 	apiRequest("/admin/settings/new-user-default-status");
 export const saveNewUserDefaultStatus = (status) =>

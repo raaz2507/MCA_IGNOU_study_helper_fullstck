@@ -142,6 +142,9 @@ export function createApp() {
 	app.get("/dashboard/academic-operations", (_request, response) =>
 		response.sendFile(path.join(env.pagesRoot, "dashboard-academic-operations.html"))
 	);
+	app.get("/admin/users", (_request, response) =>
+		response.sendFile(path.join(env.pagesRoot, "admin-users.html"))
+	);
 	for (const page of pages) {
 		app.get(`/${page}`, (_request, response) =>
 			response.sendFile(path.join(env.pagesRoot, `${page}.html`))

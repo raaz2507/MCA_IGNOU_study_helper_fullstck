@@ -1,4 +1,6 @@
 import type { RequestHandler } from "express";
+import crypto from "node:crypto";
+import bcrypt from "bcryptjs";
 import { asyncHandler } from "../../shared/middleware/async-handler.js";
 import { adminService } from "./admin.service.js";
 import { prisma } from "../../config/prisma.js";
@@ -382,6 +384,25 @@ export const updateUser: RequestHandler = asyncHandler(async (request, response)
 	);
 	await audit(String(request.user?.id), "USER_UPDATED", "User", user.id, input);
 	response.json(user);
+});
+
+export const resetUserPassword: RequestHandler = asyncHandler(async (request, response) => {
+	const id = String(request.params.id);
+	const temporaryPassword = `GyanPath-${crypto.randomBytes(5).toString("hex")}`;
+	const passwordHash = await bcrypt.hash(temporaryPassword, 12);
+	const user = await adminService.resetPassword(String(request.user?.id), id, passwordHash);
+	await audit(String(request.user?.id), "USER_PASSWORD_RESET", "User", user.id);
+	response.json({ user, temporaryPassword });
+});
+
+export const deleteUser: RequestHandler = asyncHandler(async (request, response) => {
+	const deleted = await adminService.deleteUser(String(request.user?.id), String(request.params.id));
+	await audit(String(request.user?.id), "USER_DELETED", "User", deleted.id, {
+		username: deleted.username,
+		displayName: deleted.displayName,
+		role: deleted.role
+	});
+	response.json(deleted);
 });
 
 export const getNewUserDefaultStatus: RequestHandler = asyncHandler(async (_request, response) => {

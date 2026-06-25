@@ -30,7 +30,11 @@ function actionMarkup(action, variant) {
 	}
 
 	if (action === "logout") {
-		return themedActionsMarkup('<button type="button" class="logout-button" data-logout>Logout</button>');
+		return themedActionsMarkup(`
+			<div class="protected-actions">
+				<a href="/dashboard">Dashboard</a>
+				<button type="button" class="logout-button" data-logout>Logout</button>
+			</div>`);
 	}
 
 	if (action === "subjects") {

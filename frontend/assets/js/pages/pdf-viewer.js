@@ -10,13 +10,6 @@
 
 	const title = params.get("title") || "PDF Reader";
 	const requestedLanguage = params.get("lang") === "hi" ? "hi" : "en";
-	const savedTheme =
-		localStorage.getItem("study-helper-theme")
-		|| localStorage.getItem("pdf-reader-theme");
-	const themes = Array.isArray(window.STUDY_HELPER_THEMES)
-		? window.STUDY_HELPER_THEMES
-		: [{ id: "light", label: "Light" }];
-	const allowedThemes = themes.map((theme) => theme.id);
 	let currentLanguage = documents[requestedLanguage]
 		? requestedLanguage
 		: (documents.en ? "en" : "hi");
@@ -29,21 +22,6 @@
 	const hindiButton = document.getElementById("hindiButton");
 	const downloadButton = document.getElementById("downloadButton");
 	const fullscreenButton = document.getElementById("fullscreenButton");
-	const themeGroup = document.querySelector(
-		'.control-group[aria-label="Reading theme"]'
-	);
-	if (themeGroup) {
-		themeGroup.querySelectorAll(".theme-button").forEach((button) => button.remove());
-		themes.forEach((theme) => {
-			const button = document.createElement("button");
-			button.className = "control-button theme-button";
-			button.dataset.theme = theme.id;
-			button.type = "button";
-			button.textContent = theme.label.replace(/^[^\p{L}\p{N}]+/u, "");
-			themeGroup.append(button);
-		});
-	}
-	const themeButtons = [...document.querySelectorAll(".theme-button")];
 
 	async function runtimePdfBaseUrl() {
 		try {
@@ -150,20 +128,8 @@
 		hindiButton.classList.toggle("active", language === "hi");
 	}
 
-	function setTheme(theme) {
-		const selectedTheme = allowedThemes.includes(theme) ? theme : "light";
-		document.documentElement.dataset.theme = selectedTheme;
-		localStorage.setItem("study-helper-theme", selectedTheme);
-		themeButtons.forEach((button) => {
-			button.classList.toggle("active", button.dataset.theme === selectedTheme);
-		});
-	}
-
 	englishButton.addEventListener("click", () => loadDocument("en"));
 	hindiButton.addEventListener("click", () => loadDocument("hi"));
-	themeButtons.forEach((button) => {
-		button.addEventListener("click", () => setTheme(button.dataset.theme));
-	});
 
 	document.getElementById("backButton").addEventListener("click", () => {
 		if (history.length > 1) {
@@ -186,8 +152,6 @@
 		document.body.classList.toggle("is-fullscreen", isFullscreen);
 		fullscreenButton.textContent = isFullscreen ? "Exit Fullscreen" : "Fullscreen";
 	});
-
-	setTheme(savedTheme || "light");
 
 	async function initializeDocuments() {
 		const pdfBaseUrl = await runtimePdfBaseUrl();

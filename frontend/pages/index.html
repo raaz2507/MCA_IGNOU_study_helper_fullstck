@@ -38,7 +38,13 @@
 
 				<form id="homeLoginForm" class="account-form is-active" data-account-panel="login">
 					<label>Username<input name="username" autocomplete="username" required /></label>
-					<label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
+					<label>Password</label>
+					<div class="password-input-wrap">
+						<input name="password" type="password" autocomplete="current-password" required />
+						<button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">
+							<span class="password-eye" aria-hidden="true"></span>
+						</button>
+					</div>
 					<button type="submit">Login</button>
 				</form>
 
@@ -46,7 +52,13 @@
 					<label>Full name<input name="displayName" autocomplete="name" required /></label>
 					<label>Username<input name="username" autocomplete="username" required /></label>
 					<label>Email<input name="email" type="email" autocomplete="email" required /></label>
-					<label>Password<input name="password" type="password" minlength="8" autocomplete="new-password" required /></label>
+					<label>Password</label>
+					<div class="password-input-wrap">
+						<input name="password" type="password" minlength="8" autocomplete="new-password" required />
+						<button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">
+							<span class="password-eye" aria-hidden="true"></span>
+						</button>
+					</div>
 					<button type="submit">Create Account</button>
 					<small>New accounts may require Admin approval before login.</small>
 				</form>

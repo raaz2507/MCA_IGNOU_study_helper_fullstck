@@ -11,6 +11,8 @@ import {
 	youtubeEmbedUrl
 } from "../utils/video-lectures-store.js";
 
+import { showToast } from "../utils/toast.js";
+
 const form = document.getElementById("lectureForm");
 const list = document.getElementById("lectureAdminList");
 const message = document.getElementById("lectureMessage");
@@ -32,6 +34,9 @@ function subjectTitle(subject) {
 function showMessage(text, type = "") {
 	message.textContent = text;
 	message.className = `contributor-message ${type}`.trim();
+	if (["success", "error", "warning", "info"].includes(type) && text) {
+		showToast(text, type);
+	}
 }
 
 async function populateSubjects() {

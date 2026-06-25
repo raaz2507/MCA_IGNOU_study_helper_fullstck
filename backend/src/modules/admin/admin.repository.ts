@@ -47,11 +47,19 @@ export const adminRepository = {
 				role: true,
 				status: true,
 				createdAt: true,
+				analyticsVisits: {
+					take: 1,
+					orderBy: { createdAt: "desc" },
+					select: { createdAt: true, pagePath: true, deviceType: true, browser: true }
+				},
 				_count: {
 					select: {
 						progress: true,
 						discussions: true,
-						comments: true
+						comments: true,
+						assignments: true,
+						reportsMade: true,
+						reportsAbout: true
 					}
 				}
 			},
@@ -103,6 +111,19 @@ export const adminRepository = {
 				status: true,
 				createdAt: true
 			}
+		});
+	},
+	updatePassword(id: string, passwordHash: string) {
+		return prisma.user.update({
+			where: { id },
+			data: { passwordHash },
+			select: { id: true, username: true, displayName: true }
+		});
+	},
+	deleteUser(id: string) {
+		return prisma.user.delete({
+			where: { id },
+			select: { id: true, username: true, displayName: true, role: true }
 		});
 	},
 	adminCount() {

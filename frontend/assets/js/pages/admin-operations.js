@@ -12,6 +12,7 @@ import {
 	saveAdminSemester,
 	saveAdminSubject
 } from "../api/admin.api.js";
+import { showToast } from "../utils/toast.js";
 
 const operationsMessage = document.getElementById("adminOperationsMessage");
 const subjectSort = document.getElementById("subjectSort");
@@ -21,6 +22,9 @@ function setMessage(element, text, type = "") {
 	if (!element) return;
 	element.textContent = text;
 	element.className = `admin-message ${type}`.trim();
+	if (["success", "error", "warning", "info"].includes(type) && text) {
+		showToast(text, type);
+	}
 }
 
 function emptyCard(text) {
@@ -35,7 +39,9 @@ function actionButton(label, handler, danger = false) {
 	button.type = "button";
 	button.className = danger ? "button button-danger" : "button";
 	button.textContent = label;
-	button.addEventListener("click", handler);
+	button.addEventListener("click", () => {
+		Promise.resolve(handler()).catch((error) => setMessage(operationsMessage, error.message, "error"));
+	});
 	return button;
 }
 
@@ -105,7 +111,11 @@ function renderSubjectRows() {
 		actions.className = "table-actions";
 		actions.append(
 			actionButton("Edit", () => editSubject(item)),
-			actionButton("Delete", async () => { await deleteAdminSubject(item.id); await loadOperations(); }, true)
+			actionButton("Delete", async () => {
+				await deleteAdminSubject(item.id);
+				await loadOperations();
+				setMessage(operationsMessage, "Subject deleted.", "success");
+			}, true)
 		);
 		row.append(
 			tableCell(`Sem ${item.semester}`),
@@ -186,13 +196,21 @@ async function loadOperations() {
 	renderCards("adminSemesters", semesters, "No semesters added yet.", (item) =>
 		itemCard(`${item.number}. ${item.title}`, item.status, [
 			actionButton("Edit", () => editSemester(item)),
-			actionButton("Delete", async () => { await deleteAdminSemester(item.id); await loadOperations(); }, true)
+			actionButton("Delete", async () => {
+				await deleteAdminSemester(item.id);
+				await loadOperations();
+				setMessage(operationsMessage, "Semester deleted.", "success");
+			}, true)
 		]));
 	renderSubjectRows();
 	renderCards("adminAssignments", assignments, "No assignments added yet.", (item) =>
 		itemCard(`${item.subject.code}: ${item.title}`, `${item.status}${item.dueDate ? ` · Due ${new Date(item.dueDate).toLocaleDateString()}` : ""}`, [
 			actionButton("Edit", () => editAssignment(item)),
-			actionButton("Delete", async () => { await deleteAdminAssignment(item.id); await loadOperations(); }, true)
+			actionButton("Delete", async () => {
+				await deleteAdminAssignment(item.id);
+				await loadOperations();
+				setMessage(operationsMessage, "Assignment deleted.", "success");
+			}, true)
 		]));
 	renderCards("adminReports", reports, "No reports to review.", (item) => {
 		const card = itemCard(item.reason, `${item.targetType} · ${new Date(item.createdAt).toLocaleDateString()}`);
@@ -209,6 +227,7 @@ async function loadOperations() {
 		actions.append(status, resolution, actionButton("Save", async () => {
 			await reviewAdminReport(item.id, { status: status.value, resolution: resolution.value || null });
 			await loadOperations();
+			setMessage(operationsMessage, "Report review saved.", "success");
 		}));
 		return card;
 	});
@@ -229,47 +248,59 @@ async function loadOperations() {
 document.getElementById("semesterForm")?.addEventListener("submit", async (event) => {
 	event.preventDefault();
 	const id = document.getElementById("semesterEditId").value;
-	await saveAdminSemester({
-		number: Number(document.getElementById("semesterNumber").value),
-		title: document.getElementById("semesterTitle").value,
-		active: true,
-		status: "PUBLISHED"
-	}, id);
-	resetSemesterForm();
-	setMessage(operationsMessage, id ? "Semester updated." : "Semester created.", "success");
-	await loadOperations();
+	try {
+		await saveAdminSemester({
+			number: Number(document.getElementById("semesterNumber").value),
+			title: document.getElementById("semesterTitle").value,
+			active: true,
+			status: "PUBLISHED"
+		}, id);
+		resetSemesterForm();
+		setMessage(operationsMessage, id ? "Semester updated." : "Semester created.", "success");
+		await loadOperations();
+	} catch (error) {
+		setMessage(operationsMessage, error.message, "error");
+	}
 });
 
 document.getElementById("subjectForm")?.addEventListener("submit", async (event) => {
 	event.preventDefault();
 	const id = document.getElementById("subjectEditId").value;
 	const folderPath = document.getElementById("subjectFolderInput").value.trim();
-	await saveAdminSubject({
-		code: document.getElementById("subjectCodeInput").value,
-		title: document.getElementById("subjectTitleInput").value,
-		semester: Number(document.getElementById("subjectSemesterInput").value),
-		type: document.getElementById("subjectTypeInput").value,
-		folderPath: folderPath || undefined,
-		questionBank: document.getElementById("subjectQuestionBankInput").checked
-	}, id);
-	resetSubjectForm();
-	setMessage(operationsMessage, id ? "Subject updated." : "Subject created.", "success");
-	await loadOperations();
+	try {
+		await saveAdminSubject({
+			code: document.getElementById("subjectCodeInput").value,
+			title: document.getElementById("subjectTitleInput").value,
+			semester: Number(document.getElementById("subjectSemesterInput").value),
+			type: document.getElementById("subjectTypeInput").value,
+			folderPath: folderPath || undefined,
+			questionBank: document.getElementById("subjectQuestionBankInput").checked
+		}, id);
+		resetSubjectForm();
+		setMessage(operationsMessage, id ? "Subject updated." : "Subject created.", "success");
+		await loadOperations();
+	} catch (error) {
+		setMessage(operationsMessage, error.message, "error");
+	}
 });
 
 document.getElementById("assignmentForm")?.addEventListener("submit", async (event) => {
 	event.preventDefault();
 	const id = document.getElementById("assignmentEditId").value;
 	const dueDate = document.getElementById("assignmentDueDate").value;
-	await saveAdminAssignment({
-		subjectId: document.getElementById("assignmentSubject").value,
-		title: document.getElementById("assignmentTitle").value,
-		dueDate: dueDate ? new Date(dueDate).toISOString() : null,
-		status: document.getElementById("assignmentStatus").value
-	}, id);
-	resetAssignmentForm();
-	setMessage(operationsMessage, id ? "Assignment updated." : "Assignment created.", "success");
-	await loadOperations();
+	try {
+		await saveAdminAssignment({
+			subjectId: document.getElementById("assignmentSubject").value,
+			title: document.getElementById("assignmentTitle").value,
+			dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+			status: document.getElementById("assignmentStatus").value
+		}, id);
+		resetAssignmentForm();
+		setMessage(operationsMessage, id ? "Assignment updated." : "Assignment created.", "success");
+		await loadOperations();
+	} catch (error) {
+		setMessage(operationsMessage, error.message, "error");
+	}
 });
 
 document.getElementById("cancelSemesterEdit")?.addEventListener("click", resetSemesterForm);

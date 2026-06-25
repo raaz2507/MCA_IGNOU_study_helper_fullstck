@@ -30,9 +30,7 @@
 
 			<div class="control-group" aria-label="Reading theme">
 				<span class="group-label">Theme</span>
-				<button class="control-button theme-button active" data-theme="light" type="button">Light</button>
-				<button class="control-button theme-button" data-theme="dark" type="button">Dark</button>
-				<button class="control-button theme-button" data-theme="sepia" type="button">Sepia</button>
+				<div class="theme-switcher" role="group" aria-label="Choose reader theme"></div>
 			</div>
 
 			<div class="control-group actions" aria-label="Viewer actions">
@@ -55,6 +53,7 @@
 	</main>
 
 	<script src="../assets/js/utils/theme.js"></script>
+	<script type="module" src="../assets/js/utils/page-preferences.js"></script>
 	<script src="../assets/js/pages/pdf-viewer.js"></script>
 </body>
 

@@ -105,6 +105,7 @@ export function renderFooter(container) {
 			<nav class="footer-navigation" aria-label="Footer navigation">
 				<a href="/">Home</a>
 				<a href="/resources">Resources</a>
+				<a href="/discussion">Discussion</a>
 				<a href="/about">About</a>
 				<a href="/user-guide">User Guide</a>
 				<a href="/dashboard">Dashboard</a>

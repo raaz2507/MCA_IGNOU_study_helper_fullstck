@@ -58,5 +58,24 @@ export const adminService = {
 			throw new AppError(400, "At least one Admin account is required.", "LAST_ADMIN");
 		}
 		return adminRepository.updateUser(userId, data);
+	},
+	async resetPassword(currentAdminId: string, userId: string, passwordHash: string) {
+		const user = await adminRepository.findUser(userId);
+		if (!user) throw new AppError(404, "User not found.", "USER_NOT_FOUND");
+		if (currentAdminId === userId) {
+			throw new AppError(400, "Use profile settings to change your own password.", "SELF_PASSWORD_RESET");
+		}
+		return adminRepository.updatePassword(userId, passwordHash);
+	},
+	async deleteUser(currentAdminId: string, userId: string) {
+		const user = await adminRepository.findUser(userId);
+		if (!user) throw new AppError(404, "User not found.", "USER_NOT_FOUND");
+		if (currentAdminId === userId) {
+			throw new AppError(400, "You cannot delete your own Admin account.", "SELF_DELETE");
+		}
+		if (user.role === "ADMIN" && await adminRepository.adminCount() <= 1) {
+			throw new AppError(400, "At least one Admin account is required.", "LAST_ADMIN");
+		}
+		return adminRepository.deleteUser(userId);
 	}
 };

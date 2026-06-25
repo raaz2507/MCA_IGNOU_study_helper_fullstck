@@ -87,6 +87,42 @@ a {
 	padding: 0 5px;
 }
 
+.theme-switcher {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.theme-option {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 36px;
+	padding: 7px 11px;
+	color: var(--text);
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+	font: inherit;
+	transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.theme-option:hover {
+	background: var(--surface);
+	transform: translateY(-1px);
+}
+
+.theme-option.active {
+	color: var(--accent-text);
+	background: var(--accent);
+}
+
+.theme-option:focus-visible {
+	outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+	outline-offset: 2px;
+}
+
 .control-button {
 	display: inline-flex;
 	align-items: center;
@@ -209,6 +245,11 @@ body.is-fullscreen #pdfFrame {
 	}
 
 	.control-button {
+		flex: 1;
+	}
+
+	.theme-switcher,
+	.theme-option {
 		flex: 1;
 	}
 

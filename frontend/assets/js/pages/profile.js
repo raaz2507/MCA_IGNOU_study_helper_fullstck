@@ -1,9 +1,16 @@
 import { changePassword, getProfile, updateProfile } from "../api/auth.api.js";
+import { setFlash, showToast } from "../utils/toast.js";
 
 const form = document.getElementById("profileForm");
 const message = document.getElementById("profileMessage");
 const passwordForm = document.getElementById("passwordForm");
 const passwordMessage = document.getElementById("passwordMessage");
+
+function setInlineMessage(element, text, type = "") {
+	element.textContent = text;
+	element.className = `login-message ${type}`.trim();
+	if (type) showToast(text, type);
+}
 
 async function loadProfile() {
 	const profile = await getProfile();
@@ -20,20 +27,17 @@ form.addEventListener("submit", async (event) => {
 			displayName: document.getElementById("profileDisplayName").value,
 			email: document.getElementById("profileEmail").value
 		});
-		message.textContent = "Profile saved. Reloading your updated header…";
-		message.className = "login-message success";
+		setInlineMessage(message, "Profile saved. Reloading your updated header...", "success");
 		document.querySelectorAll("[data-user-name]").forEach((element) => {
 			element.textContent = saved.displayName;
 		});
 	} catch (error) {
-		message.textContent = error.message;
-		message.className = "login-message error";
+		setInlineMessage(message, error.message, "error");
 	}
 });
 
 loadProfile().catch((error) => {
-	message.textContent = error.message;
-	message.className = "login-message error";
+	setInlineMessage(message, error.message, "error");
 });
 
 passwordForm.addEventListener("submit", async (event) => {
@@ -43,8 +47,7 @@ passwordForm.addEventListener("submit", async (event) => {
 	const confirmation = document.getElementById("confirmPassword").value;
 
 	if (newPassword !== confirmation) {
-		passwordMessage.textContent = "New password and confirmation do not match.";
-		passwordMessage.className = "login-message error";
+		setInlineMessage(passwordMessage, "New password and confirmation do not match.", "error");
 		return;
 	}
 
@@ -52,10 +55,10 @@ passwordForm.addEventListener("submit", async (event) => {
 		await changePassword({ currentPassword, newPassword });
 		passwordMessage.textContent = "Password updated. Please login again.";
 		passwordMessage.className = "login-message success";
+		setFlash("Password updated. Please login again.", "success");
 		passwordForm.reset();
 		window.setTimeout(() => window.location.replace("/login"), 1000);
 	} catch (error) {
-		passwordMessage.textContent = error.message;
-		passwordMessage.className = "login-message error";
+		setInlineMessage(passwordMessage, error.message, "error");
 	}
 });

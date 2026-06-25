@@ -3,6 +3,7 @@ import { renderHeader } from "./header.js";
 import { AccessController, AuthService } from "../utils/auth.js";
 import { renderBreadcrumb } from "./breadcrumb.js";
 import { recordPageVisit } from "../utils/analytics.js";
+import { consumeFlash, initToasts } from "../utils/toast.js";
 
 const body = document.body;
 
@@ -18,6 +19,8 @@ renderHeader(document.getElementById("app-header"), {
 renderFooter(document.getElementById("app-footer"));
 renderBreadcrumb(body.dataset.page || "");
 recordPageVisit();
+initToasts();
+consumeFlash();
 
 const siteHeader = document.querySelector(".site-header");
 if (siteHeader) {

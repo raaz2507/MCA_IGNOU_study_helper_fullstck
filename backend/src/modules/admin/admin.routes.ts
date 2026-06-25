@@ -27,6 +27,7 @@ import {
 	deleteAssignment,
 	deleteSemester,
 	deleteSubject,
+	deleteUser,
 	deleteShareSettings,
 	deleteSupportSettings,
 	exportDatabaseBackup,
@@ -43,6 +44,7 @@ import {
 	updateUser,
 	updateUserRole,
 	updateUserStatus,
+	resetUserPassword,
 	uploadSettingQrImage
 } from "./admin.controller.js";
 
@@ -112,6 +114,8 @@ adminRouter.get("/users", getUsers);
 adminRouter.patch("/users/:id/role", updateUserRole);
 adminRouter.patch("/users/:id/status", updateUserStatus);
 adminRouter.put("/users/:id", updateUser);
+adminRouter.post("/users/:id/reset-password", resetUserPassword);
+adminRouter.delete("/users/:id", deleteUser);
 adminRouter.get("/settings/new-user-default-status", getNewUserDefaultStatus);
 adminRouter.put("/settings/new-user-default-status", saveNewUserDefaultStatus);
 adminRouter.get("/system", getSystemStatus);

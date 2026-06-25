@@ -1,5 +1,7 @@
 ﻿import { AuthService, ROLE_LEVELS } from "../utils/auth.js";
 
+import { setFlash, showToast } from "../utils/toast.js";
+
 class LoginPage {
 	constructor(authService = new AuthService()) {
 		this.authService = authService;
@@ -42,6 +44,7 @@ class LoginPage {
 				formData.get("username"),
 				formData.get("password")
 			);
+			setFlash("Login successful.", "success");
 			this.redirectAfterLogin(session);
 		} catch (error) {
 			this.showMessage(error.message, "error");
@@ -66,6 +69,7 @@ class LoginPage {
 	showMessage(text, type) {
 		this.message.textContent = text;
 		this.message.className = `login-message ${type}`;
+		if (type) showToast(text, type);
 	}
 }
 

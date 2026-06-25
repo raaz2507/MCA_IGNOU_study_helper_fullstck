@@ -6,6 +6,8 @@
 	saveContributor
 } from "../utils/contributors-store.js";
 
+import { showToast } from "../utils/toast.js";
+
 const form = document.getElementById("contributorForm");
 const list = document.getElementById("contributorAdminList");
 const idInput = document.getElementById("contributorId");
@@ -22,6 +24,9 @@ let pendingAvatar = "";
 function showMessage(text, type = "") {
 	message.textContent = text;
 	message.className = `contributor-message ${type}`.trim();
+	if (["success", "error", "warning", "info"].includes(type) && text) {
+		showToast(text, type);
+	}
 }
 
 function renderAvatarPreview(name, avatar) {

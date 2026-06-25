@@ -7,6 +7,8 @@ import {
 	saveBanner
 } from "../utils/banner-store.js";
 
+import { showToast } from "../utils/toast.js";
+
 const form = document.getElementById("bannerForm");
 const list = document.getElementById("bannerAdminList");
 const message = document.getElementById("bannerMessage");
@@ -25,6 +27,9 @@ function field(id) {
 function showMessage(text, type = "") {
 	message.textContent = text;
 	message.className = `contributor-message ${type}`.trim();
+	if (["success", "error", "warning", "info"].includes(type) && text) {
+		showToast(text, type);
+	}
 }
 
 function renderPreview() {
