@@ -114,8 +114,8 @@ a {
 }
 
 .theme-option.active {
-	color: #ffffff;
-	background: #0066cc;
+	color: var(--app-primary-text);
+	background: var(--app-primary);
 }
 
 .theme-option:focus-visible {

@@ -5,14 +5,14 @@ import { getProgress, updateProgress } from "../api/progress.api.js";
 const APP_THEMES = ["light", "dark", "sepia"];
 
 function applyAppTheme(theme) {
-  const selectedTheme = APP_THEMES.includes(theme) ? theme : "light";
+  const selectedTheme = APP_THEMES.includes(theme) ? theme : "sepia";
   document.documentElement.dataset.theme = selectedTheme;
   document.body.classList.toggle("dark", selectedTheme === "dark");
   localStorage.setItem("study-helper-theme", selectedTheme);
   return selectedTheme;
 }
 
-applyAppTheme(localStorage.getItem("study-helper-theme") || "light");
+applyAppTheme(localStorage.getItem("study-helper-theme") || "sepia");
 
 class QuestionBankApp {
   constructor() {

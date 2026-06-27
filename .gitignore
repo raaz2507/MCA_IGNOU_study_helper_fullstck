@@ -1,5 +1,7 @@
 # Dependencies
 node_modules/
+package-lock.json
+
 
 # Build output and coverage
 dist/
@@ -51,3 +53,4 @@ backend/uploads/*
 backend/uploads/pdfs/*
 backend/uploads/images/*
 backend/uploads/exports/*
+package-lock.json

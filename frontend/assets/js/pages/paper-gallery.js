@@ -10,6 +10,8 @@ import { getPapers } from "../api/papers.api.js";
 		: ["light"];
 	if (allowedThemes.includes(savedTheme)) {
 		document.documentElement.dataset.theme = savedTheme;
+	} else {
+		document.documentElement.dataset.theme = "sepia";
 	}
 
 	const subject = new URLSearchParams(window.location.search).get("subject") || "";

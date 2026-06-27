@@ -3,7 +3,7 @@
 
 	const themes = Array.isArray(window.STUDY_HELPER_THEMES)
 		? window.STUDY_HELPER_THEMES
-		: [{ id: "light", label: "☀ Light" }];
+		: [{ id: "sepia", label: "◐ Sepia" }];
 	const allowedThemes = themes.map((theme) => theme.id);
 	const savedTheme = localStorage.getItem("study-helper-theme");
 	const initialTheme = allowedThemes.includes(savedTheme) ? savedTheme : "sepia";
@@ -22,7 +22,7 @@
 	}
 
 	function setTheme(theme) {
-		const selectedTheme = allowedThemes.includes(theme) ? theme : "light";
+		const selectedTheme = allowedThemes.includes(theme) ? theme : "sepia";
 		document.documentElement.dataset.theme = selectedTheme;
 		localStorage.setItem("study-helper-theme", selectedTheme);
 		document.querySelectorAll(".theme-option").forEach((button) => {

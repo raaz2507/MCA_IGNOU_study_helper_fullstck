@@ -65,7 +65,7 @@ const defaultLinkPreviewSettings = {
 	enabled: true,
 	title: "GyanPath | IGNOU MCA Study Companion",
 	description: "Watermark-Free Study PDFs • Hindi-Translated Study Material • Previous-Year Papers • Smart Question Bank • English & Hinglish Answers • Related Video Lecture Links • Revision Lists • Learning Milestones",
-	url: "https://mcaignoustudyhelperfullstck-production.up.railway.app/",
+	url: "https://raaz2507.github.io/MCA_IGNOU_study_helper_fullstack/",
 	imageSource: "upload",
 	imageUrl: null,
 	imagePath: "/assets/images/link-preview-banner.png",

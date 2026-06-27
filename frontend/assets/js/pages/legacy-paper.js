@@ -1,4 +1,4 @@
-const sharedTheme = localStorage.getItem("study-helper-theme");
+const sharedTheme = localStorage.getItem("study-helper-theme") || "sepia";
 if (["light", "dark", "sepia"].includes(sharedTheme)) {
 	document.documentElement.dataset.theme = sharedTheme;
 }
