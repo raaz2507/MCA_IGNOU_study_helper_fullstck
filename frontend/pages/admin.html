@@ -21,6 +21,7 @@
 				<a href="#adminOverview">📊 Overview</a>
 				<a href="#adminUsers">👥 Users &amp; Roles</a>
 				<a href="#adminContent">📚 Content Control</a>
+				<a href="#adminEmailVerification">Email Verification</a>
 				<a href="#adminShare">Share &amp; QR</a>
 				<a href="#adminSupport">Support</a>
 				<a href="#adminDatabase">Database Backup</a>
@@ -92,6 +93,30 @@
 				</div>
 			</section>
 
+
+			<section id="adminEmailVerification" class="dashboard-panel">
+				<div class="section-heading">
+					<p class="dashboard-label">Account security</p>
+					<h2>Resend Email Verification</h2>
+					<p>Require new users to confirm their email address before login.</p>
+				</div>
+				<form id="emailVerificationSettingsForm" class="admin-retention-form">
+					<label class="admin-toggle-row">
+						<span>
+							<strong>Require email verification</strong>
+							<small>New accounts receive a 24-hour verification link through Resend.</small>
+						</span>
+						<input id="emailVerificationEnabled" type="checkbox" role="switch" />
+					</label>
+					<div class="admin-system-item">
+						<span>Resend configuration</span>
+						<strong id="emailVerificationProviderStatus">Checking...</strong>
+					</div>
+					<small id="emailVerificationFromEmail"></small>
+					<button class="logout-button" type="submit">Save Email Verification</button>
+					<p id="emailVerificationMessage" class="admin-message" aria-live="polite"></p>
+				</form>
+			</section>
 
 			<section id="adminShare" class="dashboard-panel">
 				<div class="section-heading">

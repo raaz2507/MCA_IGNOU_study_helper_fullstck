@@ -28,6 +28,8 @@ flowchart LR
         UC15(("Review Reports"))
         UC16(("View Analytics and Audit Logs"))
         UC17(("Manage Application Settings"))
+        UC18(("Verify Email / Resend Link"))
+        UC19(("Enable / Disable Email Verification"))
     end
 
     Student --> UC1
@@ -38,6 +40,7 @@ flowchart LR
     Student --> UC6
     Student --> UC7
     Student --> UC8
+    Student --> UC18
 
     Editor --> UC1
     Editor --> UC9
@@ -54,10 +57,13 @@ flowchart LR
     Admin --> UC15
     Admin --> UC16
     Admin --> UC17
+    Admin --> UC19
 ```
 
 ## Notes / Assumptions
 
 - Admin can perform all content-management operations; Editor can create/update content but delete content is guarded for Admin only.
 - Public catalog, subject, paper and question APIs can be used without login, while profile and progress require login.
+- When the Admin verification setting is enabled, newly registered users must complete UC18 before login; profile email changes also trigger UC18.
+- UC19 is Admin-only and cannot be enabled until Resend server credentials are configured.
 - The Prisma enum includes `MODERATOR`, but no implemented moderator-specific use cases were found in the active routes.

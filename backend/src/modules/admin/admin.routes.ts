@@ -4,6 +4,7 @@ import { UserRole } from "@prisma/client";
 import { requireRoles } from "../auth/auth.middleware.js";
 import {
 	getAnalyticsRetention,
+	getEmailVerificationSettings,
 	getOverview,
 	getSubjects,
 	getSystemStatus,
@@ -38,6 +39,7 @@ import {
 	restoreDatabaseBackup,
 	saveAssignment,
 	saveAnalyticsRetention,
+	saveEmailVerificationSettings,
 	saveSemester,
 	savePaper,
 	saveShareSettings,
@@ -59,7 +61,7 @@ const settingImageUpload = multer({
 	storage: multer.memoryStorage(),
 	limits: { fileSize: 4 * 1024 * 1024 },
 	fileFilter: (_request, file, callback) => {
-		const allowed = new Set(["image/png", "image/jpeg", "image/webp"]);
+		const allowed = new Set(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]);
 		callback(null, allowed.has(file.mimetype));
 	}
 });
@@ -131,6 +133,8 @@ adminRouter.put("/settings/new-user-default-status", saveNewUserDefaultStatus);
 adminRouter.get("/system", getSystemStatus);
 adminRouter.get("/settings/analytics-retention", getAnalyticsRetention);
 adminRouter.put("/settings/analytics-retention", saveAnalyticsRetention);
+adminRouter.get("/settings/email-verification", getEmailVerificationSettings);
+adminRouter.put("/settings/email-verification", saveEmailVerificationSettings);
 adminRouter.get("/settings/share", getShareSettings);
 adminRouter.put("/settings/share", saveShareSettings);
 adminRouter.post("/settings/share/qr-refresh", refreshShareQrImage);

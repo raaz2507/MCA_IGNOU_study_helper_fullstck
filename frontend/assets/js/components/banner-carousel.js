@@ -1,6 +1,10 @@
 ﻿import { getVisibleBanners } from "../utils/banner-store.js";
+import { closeModal, openModal } from "./modal.js";
 
 const root = document.getElementById("announcementBanner");
+const detailsDialog = document.getElementById("announcementDetailsDialog");
+const detailsClose = document.getElementById("announcementDetailsClose");
+const detailsDismiss = document.getElementById("announcementDetailsDismiss");
 let banners = [];
 let activeIndex = 0;
 let timer = null;
@@ -13,10 +17,66 @@ function safeLink(value) {
 	return link;
 }
 
+function formatDate(value) {
+	if (!value) return "";
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return value;
+	return new Intl.DateTimeFormat("en-IN", {
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+		timeZone: "UTC"
+	}).format(date);
+}
+
+function showBannerDetails(banner) {
+	if (!detailsDialog) return;
+	const link = safeLink(banner.buttonUrl);
+	const action = detailsDialog.querySelector("[data-details-action]");
+	const start = detailsDialog.querySelector("[data-details-start]");
+	const end = detailsDialog.querySelector("[data-details-end]");
+
+	detailsDialog.querySelector("[data-details-image]").src = banner.image || "../assets/images/banner-exam.svg";
+	detailsDialog.querySelector("[data-details-category]").textContent = banner.category;
+	detailsDialog.querySelector("[data-details-title]").textContent = banner.title;
+	detailsDialog.querySelector("[data-details-description]").textContent = banner.description;
+	start.hidden = !banner.startDate;
+	end.hidden = !banner.endDate;
+	start.querySelector("dd").textContent = formatDate(banner.startDate);
+	end.querySelector("dd").textContent = formatDate(banner.endDate);
+	detailsDialog.querySelector("[data-details-dates]").hidden = !banner.startDate && !banner.endDate;
+
+	action.hidden = !link;
+	if (link) {
+		action.href = link;
+		action.textContent = banner.buttonText || "View details";
+		action.target = /^https?:\/\//i.test(link) ? "_blank" : "_self";
+		action.rel = action.target === "_blank" ? "noopener noreferrer" : "";
+	}
+
+	window.clearInterval(timer);
+	openModal(detailsDialog);
+}
+
 function createSlide(banner, index) {
 	const slide = document.createElement("article");
 	slide.className = "announcement-slide";
 	slide.setAttribute("aria-hidden", index === activeIndex ? "false" : "true");
+	slide.setAttribute("role", "button");
+	slide.setAttribute("aria-haspopup", "dialog");
+	slide.setAttribute("aria-label", `View details for ${banner.title}`);
+	slide.tabIndex = index === activeIndex ? 0 : -1;
+	slide.inert = index !== activeIndex;
+	slide.addEventListener("click", (event) => {
+		if (!event.target.closest("a")) showBannerDetails(banner);
+	});
+	slide.addEventListener("keydown", (event) => {
+		if (event.target.closest("a")) return;
+		if (event.key === "Enter" || event.key === " ") {
+			event.preventDefault();
+			showBannerDetails(banner);
+		}
+	});
 
 	const image = document.createElement("img");
 	image.className = "announcement-image";
@@ -61,6 +121,8 @@ function showSlide(index, restart = true) {
 		const isActive = slideIndex === activeIndex;
 		slide.classList.toggle("is-active", isActive);
 		slide.setAttribute("aria-hidden", String(!isActive));
+		slide.tabIndex = isActive ? 0 : -1;
+		slide.inert = !isActive;
 	});
 	root.querySelectorAll(".announcement-dot").forEach((dot, dotIndex) => {
 		const isActive = dotIndex === activeIndex;
@@ -131,3 +193,11 @@ async function render() {
 
 render();
 
+if (detailsDialog) {
+	detailsClose?.addEventListener("click", () => closeModal(detailsDialog));
+	detailsDismiss?.addEventListener("click", () => closeModal(detailsDialog));
+	detailsDialog.addEventListener("click", (event) => {
+		if (event.target === detailsDialog) closeModal(detailsDialog);
+	});
+	detailsDialog.addEventListener("close", startTimer);
+}

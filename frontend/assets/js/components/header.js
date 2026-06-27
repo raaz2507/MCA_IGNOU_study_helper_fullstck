@@ -58,13 +58,16 @@ function actionMarkup(action, variant) {
 			<button type="button" class="logout-button" data-logout>Logout</button>
 		</div>`);
 }
-function titleMarkup(title) {
+function titleMarkup(title, subtitle) {
 	if (title !== "GyanPath") return title;
 
 	return `
 		<span class="brand-wordmark" aria-label="GyanPath">
-			<span class="brand-icon" aria-hidden="true">📚</span>
-			<span class="brand-gyan">Gyan</span><span class="brand-path">Path</span>
+			<img class="brand-logo" src="/assets/images/brand/site-logo.png" alt="Learn &amp; Grow Create" />
+			<span class="brand-text">
+				<span class="brand-name"><span class="brand-gyan">Gyan</span><span class="brand-path">Path</span></span>
+				<span class="brand-tagline">${subtitle}</span>
+			</span>
 		</span>`;
 }
 
@@ -90,8 +93,8 @@ export function renderHeader(container, options = {}) {
 			<div class="header-content">
 				<div class="header-title">
 					${label ? `<p class="dashboard-label">${label}</p>` : ""}
-					<h1>${titleMarkup(title)}</h1>
-					<p>${subtitleMarkup}</p>
+					<h1>${titleMarkup(title, subtitleMarkup)}</h1>
+					${title === "GyanPath" ? "" : `<p>${subtitleMarkup}</p>`}
 				</div>
 				${actionMarkup(action, variant)}
 			</div>

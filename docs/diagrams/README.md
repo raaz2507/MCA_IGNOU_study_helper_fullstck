@@ -4,12 +4,12 @@ This folder contains editable Mermaid diagrams for the GyanPath MCA Study Helper
 
 ## Diagram List
 
-- [Context Diagram / User-Based Diagram](./context-diagram.md) - Shows the main users, the web application, database, static assets and external lecture metadata service.
+- [Context Diagram / User-Based Diagram](./context-diagram.md) - Shows the main users, web application, database, static assets, YouTube metadata and Resend verification delivery.
 - [DFD Level-0](./dfd-level-0.md) - Shows the system as a single process with external actors and major data stores.
 - [DFD Level-1](./dfd-level-1.md) - Breaks the system into authentication, catalog, question bank, progress, content, analytics and admin processes.
 - [UML Use Case Diagram](./uml-use-case.md) - Shows the implemented use cases available to students, editors and administrators.
 - [UML Class Diagram](./uml-class-diagram.md) - Summarizes the main database-backed domain classes and relationships from the Prisma schema.
-- [UML Sequence Diagram](./uml-sequence-diagram.md) - Shows the login, question-bank browsing and progress-saving interaction flow.
+- [UML Sequence Diagram](./uml-sequence-diagram.md) - Shows registration, Resend email verification, login, question-bank browsing and progress-saving flows.
 
 ## How to Preview Mermaid Diagrams in VS Code
 

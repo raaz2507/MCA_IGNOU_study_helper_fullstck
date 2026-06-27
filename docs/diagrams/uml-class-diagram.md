@@ -13,6 +13,10 @@ classDiagram
         String displayName
         UserRole role
         UserStatus status
+        DateTime emailVerifiedAt
+        Boolean emailVerificationRequired
+        String emailVerificationTokenHash
+        DateTime emailVerificationExpiresAt
     }
 
     class Session {
@@ -165,4 +169,6 @@ classDiagram
 
 - This diagram is based on `backend/prisma/schema.prisma`.
 - Supporting models such as `Semester`, `AppSetting` and `FileAsset` are not expanded to keep the diagram readable.
+- `AppSetting` stores the Admin email-verification toggle; sensitive Resend credentials remain environment variables rather than database fields.
+- `emailVerificationTokenHash` contains SHA-256 output, never the raw token sent to the user.
 - `Discussion` and `Comment` are present in the database schema, although backend discussion routes were not registered in the current Express app.

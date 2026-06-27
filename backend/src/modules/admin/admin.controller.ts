@@ -7,11 +7,13 @@ import { promisify } from "node:util";
 import zlib from "node:zlib";
 import bcrypt from "bcryptjs";
 import { asyncHandler } from "../../shared/middleware/async-handler.js";
+import { AppError } from "../../shared/errors/app-error.js";
 import { env } from "../../config/env.js";
 import { adminService } from "./admin.service.js";
 import { prisma } from "../../config/prisma.js";
 import {
 	analyticsRetentionSchema,
+	emailVerificationSettingsSchema,
 	assignmentSchema,
 	linkPreviewSettingsSchema,
 	paperSchema,
@@ -61,12 +63,12 @@ const defaultSupportSettings = {
 };
 const defaultLinkPreviewSettings = {
 	enabled: true,
-	title: "GyanPath | IGNOU MCA Study Helper",
-	description: "Semester-wise IGNOU MCA study material, question papers, question banks and video lectures.",
+	title: "GyanPath | IGNOU MCA Study Companion",
+	description: "Watermark-Free Study PDFs • Hindi-Translated Study Material • Previous-Year Papers • Smart Question Bank • English & Hinglish Answers • Related Video Lecture Links • Revision Lists • Learning Milestones",
 	url: "https://mcaignoustudyhelperfullstck-production.up.railway.app/",
-	imageSource: "url",
-	imageUrl: "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fmcaignoustudyhelperfullstck-production.up.railway.app%2F",
-	imagePath: null,
+	imageSource: "upload",
+	imageUrl: null,
+	imagePath: "/assets/images/link-preview-banner.png",
 	imageMeta: null
 };
 const settingsCacheTtlMs = 60_000;
@@ -1458,6 +1460,34 @@ export const updateUser: RequestHandler = asyncHandler(async (request, response)
 	);
 	await audit(String(request.user?.id), "USER_UPDATED", "User", user.id, input);
 	response.json(user);
+});
+
+export const getEmailVerificationSettings: RequestHandler = asyncHandler(async (_request, response) => {
+	const setting = await prisma.appSetting.findUnique({ where: { key: "email-verification" } });
+	const value = setting?.value as { enabled?: boolean } | null;
+	response.json({
+		enabled: value?.enabled === true,
+		configured: Boolean(env.resendApiKey && env.resendFromEmail),
+		fromEmail: env.resendFromEmail || null
+	});
+});
+
+export const saveEmailVerificationSettings: RequestHandler = asyncHandler(async (request, response) => {
+	const input = emailVerificationSettingsSchema.parse(request.body);
+	if (input.enabled && (!env.resendApiKey || !env.resendFromEmail)) {
+		throw new AppError(
+			400,
+			"Set RESEND_API_KEY and RESEND_FROM_EMAIL before enabling email verification.",
+			"EMAIL_PROVIDER_NOT_CONFIGURED"
+		);
+	}
+	await prisma.appSetting.upsert({
+		where: { key: "email-verification" },
+		update: { value: input },
+		create: { key: "email-verification", value: input }
+	});
+	await audit(String(request.user?.id), "EMAIL_VERIFICATION_SETTING_UPDATED", "AppSetting", "email-verification", input);
+	response.json({ ...input, configured: true, fromEmail: env.resendFromEmail });
 });
 
 export const resetUserPassword: RequestHandler = asyncHandler(async (request, response) => {

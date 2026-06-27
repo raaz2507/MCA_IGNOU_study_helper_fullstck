@@ -40,6 +40,26 @@ running Prisma commands. The Express server serves the frontend and owns
 application data, authentication, progress and admin APIs. Opening HTML files
 directly is no longer the primary application mode.
 
+### Resend email verification
+
+Email verification is implemented through the Resend Email API. Add these
+values to `backend/.env` before enabling it:
+
+```text
+SITE_URL=https://your-public-domain.example
+RESEND_API_KEY=re_your_api_key
+RESEND_FROM_EMAIL=GyanPath <verify@your-verified-domain.example>
+```
+
+The sender domain must be verified in Resend. Restart the server after changing
+environment variables, then open **Admin > Email Verification** and enable the
+toggle. The API key remains server-side and is never returned to the browser.
+
+When enabled, new accounts receive a single-use verification link that expires
+after 24 hours. Login is blocked until the link is consumed. Users can request a
+new link from the **Verify Email** tab, and changing a profile email triggers a
+fresh verification requirement. Existing accounts are not retroactively locked.
+
 For local PDF testing, clone or copy the resource repository into:
 
 ```text
@@ -70,6 +90,8 @@ Feature implementation progress is tracked in
 - Study material and PDF viewer
 - Light, dark and sepia themes
 - Secure JWT access/refresh login with Admin, Editor and User roles
+- Secure registration and Resend email verification with expiring hashed tokens
+- Admin-controlled email-verification toggle and provider configuration status
 - PostgreSQL-backed subjects, papers, questions, answers and admin content
 
 ## Planned Learning Features
@@ -121,15 +143,15 @@ sharing can be added.
 
 ## Implementation Plan
 
-### Phase 1: Foundation
+### Phase 1: Foundation (Implemented)
 
-- Replace hardcoded browser login with secure backend authentication
-- Add student registration and login
-- Add JWT access and refresh tokens
-- Add role-based permissions for students, moderators and admins
-- Create the PostgreSQL database and Prisma schema
-- Add student profiles and cloud-synced preferences
-- Add the real admin panel
+- Replaced hardcoded browser login with secure backend authentication
+- Added student registration, login and Resend email verification
+- Added JWT access and refresh tokens
+- Added role-based permissions for students, editors and admins
+- Created the PostgreSQL database and Prisma schema
+- Added editable student profiles and PostgreSQL-backed progress
+- Added the real admin panel and email-verification setting
 
 ### Phase 2: Discussion System
 
@@ -192,6 +214,7 @@ Recommended stack:
 - Socket.IO foundation for real-time features
 - Optional Redis and BullMQ foundation for presence and background jobs
 - JWT access and refresh authentication using secure cookies
+- Resend Email API for optional Admin-controlled account verification
 - Local Windows PostgreSQL installation
 - React Native mobile application in the future
 
@@ -347,6 +370,10 @@ PostgreSQL
 Redis is optional during current development. If it is unavailable, the main
 Express/PostgreSQL application continues running while Redis-backed queues and
 presence remain disabled.
+
+Resend is also optional at startup. If its credentials are absent, the
+application continues running but the Admin email-verification toggle remains
+unavailable.
 
 ## Question Bank Data
 

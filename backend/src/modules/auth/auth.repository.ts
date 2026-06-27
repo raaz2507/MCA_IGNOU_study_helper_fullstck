@@ -20,10 +20,18 @@ export const authRepository = {
 		email: string;
 		passwordHash: string;
 		status: "PENDING" | "ACTIVE";
+		emailVerificationRequired?: boolean;
 	}) {
 		return prisma.user.create({ data });
 	},
-	updateProfile(id: string, data: { displayName: string; email: string }) {
+	updateProfile(id: string, data: {
+		displayName: string;
+		email: string;
+		emailVerifiedAt?: Date | null;
+		emailVerificationRequired?: boolean;
+		emailVerificationTokenHash?: string | null;
+		emailVerificationExpiresAt?: Date | null;
+	}) {
 		return prisma.user.update({ where: { id }, data });
 	},
 	updatePassword(id: string, passwordHash: string) {

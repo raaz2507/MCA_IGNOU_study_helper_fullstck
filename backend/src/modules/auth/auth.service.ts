@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { env } from "../../config/env.js";
 import { AppError } from "../../shared/errors/app-error.js";
 import { authRepository } from "./auth.repository.js";
+import { emailVerificationService } from "./email-verification.service.js";
 
 const ACCESS_SECONDS = 15 * 60;
 const REFRESH_SECONDS = 7 * 24 * 60 * 60;
@@ -52,14 +53,25 @@ export const authService = {
 		const setting = await prisma.appSetting.findUnique({ where: { key: "new-user-default-status" } });
 		const value = setting?.value as { status?: string } | null;
 		const status = value?.status === "ACTIVE" ? "ACTIVE" : "PENDING";
+		const verificationRequired = await emailVerificationService.isEnabled();
 		const user = await authRepository.createUser({
 			displayName: input.displayName,
 			username: input.username,
 			email: input.email,
 			passwordHash: await bcrypt.hash(input.password, 12),
-			status
+			status,
+			emailVerificationRequired: verificationRequired
 		});
-		return { user: publicUser(user), status };
+		let emailSent = false;
+		if (verificationRequired) {
+			try {
+				await emailVerificationService.issue(user);
+				emailSent = true;
+			} catch (error) {
+				console.error("Verification email delivery failed after registration:", error);
+			}
+		}
+		return { user: publicUser(user), status, verificationRequired, emailSent };
 	},
 	async login(username: string, password: string) {
 		const user = await authRepository.findUserByUsername(username);
@@ -68,6 +80,9 @@ export const authService = {
 		}
 		if (user.status !== "ACTIVE") {
 			throw new AppError(403, `This account is ${user.status.toLowerCase()}.`, "ACCOUNT_RESTRICTED");
+		}
+		if (await emailVerificationService.isEnabled() && user.emailVerificationRequired && !user.emailVerifiedAt) {
+			throw new AppError(403, "Please verify your email before logging in.", "EMAIL_NOT_VERIFIED");
 		}
 		const refresh = refreshToken(user);
 		await authRepository.deleteExpiredSessions();
@@ -116,14 +131,37 @@ export const authService = {
 		if (existing && existing.id !== userId) {
 			throw new AppError(409, "Email is already registered.", "EMAIL_TAKEN");
 		}
-		const user = await authRepository.updateProfile(userId, input);
+		const current = await authRepository.findUserById(userId);
+		if (!current) throw new AppError(404, "User not found.", "USER_NOT_FOUND");
+		const emailChanged = current.email !== input.email;
+		const verificationRequired = emailChanged && await emailVerificationService.isEnabled();
+		const user = await authRepository.updateProfile(userId, {
+			...input,
+			...(emailChanged ? {
+				emailVerifiedAt: null,
+				emailVerificationRequired: verificationRequired,
+				emailVerificationTokenHash: null,
+				emailVerificationExpiresAt: null
+			} : {})
+		});
+		let emailSent = false;
+		if (verificationRequired) {
+			try {
+				await emailVerificationService.issue(user);
+				emailSent = true;
+			} catch (error) {
+				console.error("Verification email delivery failed after profile update:", error);
+			}
+		}
 		return {
 			id: user.id,
 			username: user.username,
 			displayName: user.displayName,
 			email: user.email || "",
 			role: user.role.toLowerCase(),
-			status: user.status
+			status: user.status,
+			verificationRequired,
+			emailSent
 		};
 	},
 	async changePassword(userId: string, currentPassword: string, newPassword: string) {
@@ -144,6 +182,8 @@ export const authService = {
 		} catch {
 			throw new AppError(401, "Authentication required.", "AUTH_REQUIRED");
 		}
-	}
+	},
+	verifyEmail: (token: string) => emailVerificationService.verify(token),
+	resendVerification: (email: string) => emailVerificationService.resend(email)
 };
 

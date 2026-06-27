@@ -20,6 +20,13 @@ export const saveAnalyticsRetention = (setting) =>
 	});
 export const getShareSettings = () =>
 	apiRequest("/admin/settings/share");
+export const getEmailVerificationSettings = () =>
+	apiRequest("/admin/settings/email-verification");
+export const saveEmailVerificationSettings = (setting) =>
+	apiRequest("/admin/settings/email-verification", {
+		method: "PUT",
+		body: JSON.stringify(setting)
+	});
 export const saveShareSettings = (setting) =>
 	apiRequest("/admin/settings/share", {
 		method: "PUT",

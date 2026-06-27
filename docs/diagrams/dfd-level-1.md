@@ -26,9 +26,12 @@ flowchart TB
     Analytics[("D6 Analytics Visits")]
     Files[("D7 Static PDFs and Assets")]
     YouTube["YouTube oEmbed"]
+    Resend["Resend Email API"]
 
-    Student -->|"Register, login, refresh, logout, update profile/password"| P1
-    P1 <-->|"User account and refresh session data"| Users
+    Student -->|"Register, verify/resend email, login, refresh, logout, update profile/password"| P1
+    P1 <-->|"User, hashed verification token and refresh session data"| Users
+    P1 -->|"Verification email request"| Resend
+    Resend -->|"Verification link"| Student
     P1 -->|"Authenticated session details"| Student
 
     Student -->|"Browse catalog, subjects, papers, materials"| P2
@@ -67,5 +70,7 @@ flowchart TB
 
 - The DFD focuses on implemented backend APIs registered in `backend/src/app.ts`.
 - Progress is protected by authentication and stores completed, bookmarked and revision states.
+- Authentication checks the `email-verification` application setting. Raw verification tokens are emailed but only their SHA-256 hashes and expiry times are stored.
+- The Admin process controls whether verification is enforced and exposes provider configuration status without exposing the Resend API key.
 - Discussion and chat pages are excluded from the main DFD processes because the visible backend route registration does not include active `/api/discussions` or `/api/chat` routers.
 - `Note` exists in the Prisma schema, but implemented note APIs were not found in the current route list.

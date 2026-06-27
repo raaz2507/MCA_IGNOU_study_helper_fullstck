@@ -163,8 +163,9 @@ function renderList() {
 imageInput.addEventListener("change", async () => {
 	const file = imageInput.files[0];
 	if (!file) return;
-	if (!file.type.startsWith("image/")) {
-		showMessage("Please select an image file.", "error");
+	const allowedTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]);
+	if (!allowedTypes.has(file.type)) {
+		showMessage("Please select a PNG, JPEG, SVG, or WebP file.", "error");
 		imageInput.value = "";
 		return;
 	}

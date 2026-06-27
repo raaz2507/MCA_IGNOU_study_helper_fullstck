@@ -15,7 +15,9 @@ const schema = z.object({
 	DATABASE_URL: z.string().min(1),
 	REDIS_URL: z.string().default("redis://localhost:6379"),
 	JWT_ACCESS_SECRET: z.string().min(24),
-	JWT_REFRESH_SECRET: z.string().min(24)
+	JWT_REFRESH_SECRET: z.string().min(24),
+	RESEND_API_KEY: z.string().trim().default(""),
+	RESEND_FROM_EMAIL: z.string().trim().default("")
 });
 
 const parsed = schema.parse(process.env);
@@ -29,6 +31,8 @@ export const env = Object.freeze({
 	redisUrl: parsed.REDIS_URL,
 	accessSecret: parsed.JWT_ACCESS_SECRET,
 	refreshSecret: parsed.JWT_REFRESH_SECRET,
+	resendApiKey: parsed.RESEND_API_KEY,
+	resendFromEmail: parsed.RESEND_FROM_EMAIL,
 	projectRoot,
 	backendRoot,
 	localResourcesRoot: path.join(projectRoot, "local-resources"),

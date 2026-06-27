@@ -5,6 +5,7 @@ import {
 	deleteShareSettings,
 	deleteSupportSettings,
 	getAnalyticsRetention,
+	getEmailVerificationSettings,
 	getAdminAssignments,
 	getAdminAuditLogs,
 	getAdminOverview,
@@ -23,6 +24,7 @@ import {
 	saveAdminSemester,
 	saveAdminSubject,
 	saveAnalyticsRetention,
+	saveEmailVerificationSettings,
 	saveNewUserDefaultStatus,
 	saveShareSettings,
 	saveSupportSettings,
@@ -45,6 +47,9 @@ const cleanupEnabled = document.getElementById("analyticsCleanupEnabled");
 const retentionDays = document.getElementById("analyticsRetentionDays");
 const cleanupAction = document.getElementById("analyticsCleanupAction");
 const retentionMessage = document.getElementById("analyticsRetentionMessage");
+const emailVerificationForm = document.getElementById("emailVerificationSettingsForm");
+const emailVerificationEnabled = document.getElementById("emailVerificationEnabled");
+const emailVerificationMessage = document.getElementById("emailVerificationMessage");
 const subjectSort = document.getElementById("subjectSort");
 const shareSettingsForm = document.getElementById("shareSettingsForm");
 const shareSettingsMessage = document.getElementById("shareSettingsMessage");
@@ -717,6 +722,17 @@ async function initialize() {
 	}
 
 	try {
+		const setting = await getEmailVerificationSettings();
+		emailVerificationEnabled.checked = setting.enabled;
+		document.getElementById("emailVerificationProviderStatus").textContent = setting.configured ? "Configured" : "Not configured";
+		document.getElementById("emailVerificationFromEmail").textContent = setting.fromEmail
+			? `Sender: ${setting.fromEmail}`
+			: "Add RESEND_API_KEY and RESEND_FROM_EMAIL to backend/.env, then restart the server.";
+	} catch (error) {
+		setMessage(emailVerificationMessage, `Email verification settings could not be loaded: ${error.message}`, "error");
+	}
+
+	try {
 		fillShareSettings(await getShareSettings());
 	} catch (error) {
 		fillShareSettings();
@@ -832,6 +848,21 @@ retentionForm.addEventListener("submit", async (event) => {
 		);
 	} catch (error) {
 		setMessage(retentionMessage, error.message, "error");
+	}
+});
+emailVerificationForm?.addEventListener("submit", async (event) => {
+	event.preventDefault();
+	try {
+		const saved = await saveEmailVerificationSettings({ enabled: emailVerificationEnabled.checked });
+		document.getElementById("emailVerificationProviderStatus").textContent = saved.configured ? "Configured" : "Not configured";
+		setMessage(
+			emailVerificationMessage,
+			saved.enabled ? "Email verification is enabled for new accounts." : "Email verification is disabled.",
+			"success"
+		);
+	} catch (error) {
+		emailVerificationEnabled.checked = false;
+		setMessage(emailVerificationMessage, error.message, "error");
 	}
 });
 shareSettingsForm.addEventListener("submit", async (event) => {

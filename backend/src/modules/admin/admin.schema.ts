@@ -11,6 +11,10 @@ export const analyticsRetentionSchema = z.object({
 	action: z.enum(["delete", "anonymize"])
 });
 
+export const emailVerificationSettingsSchema = z.object({
+	enabled: z.boolean()
+});
+
 const optionalUrl = z.preprocess(
 	(value) => typeof value === "string" && value.trim() === "" ? null : value,
 	z.string().trim().url().max(500).optional().nullable()

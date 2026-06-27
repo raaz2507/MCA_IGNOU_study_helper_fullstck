@@ -2,7 +2,7 @@
 
 ## Explanation
 
-This sequence diagram shows a common implemented user flow: login, browse the question bank, open a question and save progress. It follows the frontend REST client, Express controllers/services/repositories, Prisma and PostgreSQL.
+This sequence diagram shows registration, Resend email verification, login, question-bank browsing and progress saving across the frontend, Express modules, Prisma and PostgreSQL.
 
 ```mermaid
 sequenceDiagram
@@ -12,12 +12,34 @@ sequenceDiagram
     participant Auth as Auth Module
     participant Questions as Questions Module
     participant Progress as Progress Module
+    participant Resend as Resend Email API
     participant Prisma as Prisma ORM
     participant DB as PostgreSQL
 
+    Student->>Browser: Submit registration details
+    Browser->>API: POST /api/auth/register
+    API->>Auth: Validate input and create account
+    Auth->>Prisma: Read email-verification AppSetting
+    Prisma->>DB: Read setting and check unique user fields
+    alt Email verification enabled
+        Auth->>Auth: Generate token and SHA-256 hash
+        Auth->>Prisma: Store hash, required flag and 24-hour expiry
+        Prisma->>DB: Write verification state
+        Auth->>Resend: POST /emails with verification link
+        Resend-->>Student: Deliver verification email
+        Student->>Browser: Open verification link
+        Browser->>API: POST /api/auth/verify-email
+        API->>Auth: Hash and validate token
+        Auth->>Prisma: Mark verified and clear token fields
+        Prisma->>DB: Update User
+        API-->>Browser: Email verified
+    else Email verification disabled
+        Auth->>Prisma: Create account without verification requirement
+    end
+
     Student->>Browser: Enter username and password
     Browser->>API: POST /api/auth/login
-    API->>Auth: Validate credentials
+    API->>Auth: Validate credentials, account status and email state
     Auth->>Prisma: Find user and create refresh session
     Prisma->>DB: Read User and write Session
     DB-->>Prisma: User and session data
@@ -59,5 +81,8 @@ sequenceDiagram
 ## Notes / Assumptions
 
 - Authentication uses HTTP-only cookies named by the backend for access and refresh tokens.
+- Verification links are single-use, expire after 24 hours and contain the raw token only in transit; PostgreSQL stores its SHA-256 hash.
+- `POST /api/auth/resend-verification` rotates the token and returns a generic accepted response to reduce account enumeration.
+- If Resend delivery fails during registration, the account remains created and the user can request another link.
 - The frontend API client retries once through `/api/auth/refresh` when an authenticated request receives `401`.
 - The diagram shows the database-backed flow; static resource pages and PDF viewing use served frontend assets in addition to API data.

@@ -27,7 +27,12 @@ form.addEventListener("submit", async (event) => {
 			displayName: document.getElementById("profileDisplayName").value,
 			email: document.getElementById("profileEmail").value
 		});
-		setInlineMessage(message, "Profile saved. Reloading your updated header...", "success");
+		const savedMessage = saved.verificationRequired
+			? saved.emailSent
+				? "Profile saved. Check your inbox to verify the new email address."
+				: "Profile saved, but verification email delivery failed. Use Resend Verification in the home page Sign Up section."
+			: "Profile saved. Reloading your updated header...";
+		setInlineMessage(message, savedMessage, saved.emailSent === false && saved.verificationRequired ? "warning" : "success");
 		document.querySelectorAll("[data-user-name]").forEach((element) => {
 			element.textContent = saved.displayName;
 		});

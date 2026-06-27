@@ -16,8 +16,8 @@ Update the checkbox and status whenever a feature is completed.
 - Frontend status: Modular pages, shared components and API clients completed
 - Backend status: Core APIs, authentication, persistence and static serving completed
 - Database status: Local Windows PostgreSQL connected through Prisma
-- Next milestone: Registration, account recovery and full Admin CRUD
-- Last updated: June 23, 2026
+- Next milestone: Account recovery and remaining Admin content CRUD
+- Last updated: June 27, 2026
 
 ---
 
@@ -96,15 +96,19 @@ Update the checkbox and status whenever a feature is completed.
 - [x] Logout action
 - [x] Access-denied page
 - [-] Remove demo credentials displayed on the login page
-- [ ] Create secure backend registration
+- [x] Create secure backend registration
 - [x] Create secure backend login
 - [x] Password hashing
 - [x] JWT access tokens
 - [x] Refresh-token flow
 - [ ] Forgot-password flow
-- [ ] Email verification
+- [x] Resend email delivery integration
+- [x] Email verification with hashed, 24-hour tokens
+- [x] Block login until a required email is verified
+- [x] Resend-verification flow with generic response for unknown/ineligible addresses
+- [x] Re-verify email after a profile email change
 - [x] Role-based backend authorization
-- [-] Student profile page placeholder
+- [x] Student profile view and edit page
 - [ ] Profile photo
 - [ ] Semester and enrolled-subject settings
 - [ ] Blocked-users list
@@ -149,6 +153,7 @@ Update the checkbox and status whenever a feature is completed.
 - [x] Notes table
 - [x] Progress table
 - [x] Discussions and comments tables
+- [x] Email-verification state and hashed token fields on users
 - [ ] Chat and messages tables
 - [ ] Notifications table
 - [ ] Moderation and reports tables
@@ -179,6 +184,7 @@ Update the checkbox and status whenever a feature is completed.
 - [x] Suspend or ban accounts
 - [ ] Content publishing workflow
 - [x] Audit log
+- [x] Email-verification on/off setting and Resend configuration status
 
 ## 8. Discussion and Doubt Board
 
@@ -404,3 +410,4 @@ Update the checkbox and status whenever a feature is completed.
 | June 23, 2026 | Express/PostgreSQL port | Completed | Added Express, TypeScript, Prisma migrations/seed, PostgreSQL persistence, JWT refresh auth, tests and browser verification |
 | June 23, 2026 | Checklist verification | Completed | Reconciled frontend, profile, discussion, chat, API-documentation and health-check statuses with the current codebase |
 | June 23, 2026 | Admin operations | Completed | Added semester and assignment management, account restrictions, report review, audit history and corresponding Admin APIs/UI |
+| June 27, 2026 | Resend email verification | Completed | Added hashed expiring tokens, verification/resend APIs, login enforcement, email-change re-verification and an Admin on/off toggle |

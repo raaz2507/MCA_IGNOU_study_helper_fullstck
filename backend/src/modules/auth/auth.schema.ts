@@ -25,3 +25,11 @@ export const changePasswordSchema = z.object({
 	path: ["newPassword"]
 });
 
+export const verifyEmailSchema = z.object({
+	token: z.string().trim().min(40).max(200)
+});
+
+export const resendVerificationSchema = z.object({
+	email: z.string().trim().email().max(160).transform((value) => value.toLowerCase())
+});
+

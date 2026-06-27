@@ -3,8 +3,8 @@ import { z } from "zod";
 import { asyncHandler } from "../../shared/middleware/async-handler.js";
 import { questionsService } from "./questions.service.js";
 
-const subjectQuery = z.object({ subject: z.string().min(1) });
-const itemQuery = subjectQuery.extend({ file: z.string().min(1) });
+const subjectQuery = z.object({ subject: z.string().regex(/^[A-Za-z0-9_]+(?:[/][A-Za-z0-9_]+)*$/) });
+const itemQuery = subjectQuery.extend({ file: z.string().regex(/^[A-Za-z0-9_-]+[.]json$/) });
 
 export const getManifest: RequestHandler = asyncHandler(async (request, response) => {
 	const query = subjectQuery.parse(request.query);

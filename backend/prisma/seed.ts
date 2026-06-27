@@ -219,6 +219,7 @@ async function seedContent() {
 			id: "rajaanha",
 			name: "Rajaanha",
 			info: "Developer and maintainer of the MCA Study Helper.",
+			avatar: "/assets/images/contributors/rajaanha-guinea-pig.png",
 			contributions: [
 				"Designed and developed the study helper",
 				"Organized semester-wise study resources"

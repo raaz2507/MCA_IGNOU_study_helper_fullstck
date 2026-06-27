@@ -2,7 +2,7 @@
 import { env } from "../../config/env.js";
 import { asyncHandler } from "../../shared/middleware/async-handler.js";
 import { authService } from "./auth.service.js";
-import { changePasswordSchema, loginSchema, registerSchema, updateProfileSchema } from "./auth.schema.js";
+import { changePasswordSchema, loginSchema, registerSchema, resendVerificationSchema, updateProfileSchema, verifyEmailSchema } from "./auth.schema.js";
 
 const cookieOptions = {
 	httpOnly: true,
@@ -29,6 +29,16 @@ export const register: RequestHandler = asyncHandler(async (request, response) =
 	const input = registerSchema.parse(request.body);
 	const result = await authService.register(input);
 	response.status(201).json(result);
+});
+
+export const verifyEmail: RequestHandler = asyncHandler(async (request, response) => {
+	const input = verifyEmailSchema.parse(request.body);
+	response.json(await authService.verifyEmail(input.token));
+});
+
+export const resendVerification: RequestHandler = asyncHandler(async (request, response) => {
+	const input = resendVerificationSchema.parse(request.body);
+	response.json(await authService.resendVerification(input.email));
 });
 
 export const refresh: RequestHandler = asyncHandler(async (request, response) => {

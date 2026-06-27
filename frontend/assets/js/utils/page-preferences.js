@@ -6,7 +6,7 @@
 		: [{ id: "light", label: "☀ Light" }];
 	const allowedThemes = themes.map((theme) => theme.id);
 	const savedTheme = localStorage.getItem("study-helper-theme");
-	const initialTheme = allowedThemes.includes(savedTheme) ? savedTheme : "light";
+	const initialTheme = allowedThemes.includes(savedTheme) ? savedTheme : "sepia";
 	const themeSwitcher = document.querySelector(".theme-switcher");
 
 	if (themeSwitcher) {

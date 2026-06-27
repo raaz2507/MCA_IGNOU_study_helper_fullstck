@@ -114,8 +114,8 @@ a {
 }
 
 .theme-option.active {
-	color: var(--accent-text);
-	background: var(--accent);
+	color: #ffffff;
+	background: #0066cc;
 }
 
 .theme-option:focus-visible {

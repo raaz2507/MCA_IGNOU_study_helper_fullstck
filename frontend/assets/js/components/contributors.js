@@ -2,12 +2,16 @@
 
 const grid = document.getElementById("contributorsGrid");
 const emptyState = document.getElementById("contributorsEmpty");
+const defaultContributorAvatars = {
+	rajaanha: "/assets/images/contributors/rajaanha-guinea-pig.png"
+};
 
 function contributorCard(contributor) {
+	const avatarUrl = contributor.avatar || defaultContributorAvatars[contributor.id] || "";
 	const card = document.createElement("article");
 	card.className = "contributor-card";
-	if (contributor.avatar) {
-		card.style.setProperty("--contributor-photo", `url("${contributor.avatar}")`);
+	if (avatarUrl) {
+		card.style.setProperty("--contributor-photo", `url("${avatarUrl}")`);
 	}
 
 	const topBar = document.createElement("div");
@@ -21,9 +25,9 @@ function contributorCard(contributor) {
 
 	const avatar = document.createElement("div");
 	avatar.className = "contributor-avatar";
-	if (contributor.avatar) {
+	if (avatarUrl) {
 		const image = document.createElement("img");
-		image.src = contributor.avatar;
+		image.src = avatarUrl;
 		image.alt = `${contributor.name} profile`;
 		avatar.append(image);
 	} else {

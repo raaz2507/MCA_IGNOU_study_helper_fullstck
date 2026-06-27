@@ -143,6 +143,9 @@ export function createApp() {
 	app.use("/uploads", express.static(path.join(env.projectRoot, "uploads"), userContentCache));
 	app.use("/local-resources", express.static(env.localResourcesRoot, userContentCache));
 	app.use("/frontend", express.static(env.frontendRoot, assetCache));
+	app.get("/favicon.ico", (_request, response) => {
+		response.sendFile(path.join(env.frontendRoot, "assets", "images", "brand", "favicon.ico"));
+	});
 	app.get("/robots.txt", (_request, response) => {
 		response.type("text/plain").send([
 			"User-agent: *",

@@ -1,0 +1,13 @@
+LICENSE,sha256=ZhD6pea-U0K6zD6ZB-Qs7FJa7batg6twQ_hNl_EAbMM,1082
+vtracer-0.6.15.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+vtracer-0.6.15.dist-info/METADATA,sha256=Te9fhwsmSsmtp1trMI-MErBJ5JnSly7f-jWW76IzPyI,4399
+vtracer-0.6.15.dist-info/RECORD,,
+vtracer-0.6.15.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+vtracer-0.6.15.dist-info/WHEEL,sha256=IerCNAQpy9eepfUjoenIR-EbFm_XEgG9BeNfw_zQQO0,97
+vtracer-0.6.15.dist-info/licenses/LICENSE,sha256=ZhD6pea-U0K6zD6ZB-Qs7FJa7batg6twQ_hNl_EAbMM,1082
+vtracer-0.6.15.dist-info/sboms/vtracer.cyclonedx.json,sha256=U2ZtPvjX-mmgugqTcaTuKjzONA_ZXLnfv4rBEUy0Mm0,74893
+vtracer/README.md,sha256=HqjjCBp6d-b6O-CHpbxVyR0V0eraiQsX2XZAuYw6YNc,3858
+vtracer/__init__.py,sha256=PmlzWNf7SogLYPwnmGS28w5hmAfBg_K1TMvYHF140vI,120
+vtracer/__pycache__/__init__.cpython-312.pyc,,
+vtracer/vtracer.cp312-win_amd64.pyd,sha256=WeIFP8qGZkeecWPuxF2LFRQ0Nceo0U9tvSbuyXFr_mY,1914880
+vtracer/vtracer.pyi,sha256=Z4Rxlk1D_PQ3o_GLgA_uoyq5RtkW-WwNzaEljR1sF5Y,3640

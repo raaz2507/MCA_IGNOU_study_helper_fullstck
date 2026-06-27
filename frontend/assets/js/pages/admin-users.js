@@ -209,7 +209,7 @@ function renderUsers() {
 				setMessage("Force password change needs a database flag before it can be enforced at login.", "error");
 			}),
 			actionButton("Verify Email", () => {
-				setMessage("Email verification is not enabled in the current user schema.", "error");
+				setMessage("Email verification is handled through the Resend link sent to the user.", "info");
 			}),
 			actionButton("Delete", async () => {
 				if (!confirm(`Delete ${user.displayName}? This cannot be undone.`)) return;

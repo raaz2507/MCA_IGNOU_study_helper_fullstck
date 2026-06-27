@@ -2,13 +2,46 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<meta http-equiv="refresh" content="0; url=frontend/pages/index.html" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="refresh" content="2; url=https://gyanpath.up.railway.app/" />
 	<title>Opening GyanPath…</title>
+	<style>
+		body {
+			display: grid;
+			min-height: 100vh;
+			margin: 0;
+			place-items: center;
+			color: #172033;
+			background: #f6f8fc;
+			font-family: system-ui, sans-serif;
+		}
+
+		main {
+			padding: 32px;
+			text-align: center;
+		}
+
+		a {
+			display: inline-block;
+			margin-top: 12px;
+			padding: 12px 20px;
+			color: #fff;
+			background: #2563eb;
+			border-radius: 10px;
+			font-weight: 700;
+			text-decoration: none;
+		}
+	</style>
 </head>
 <body>
+	<main>
+		<h1>Opening GyanPath…</h1>
+		<p>If automatic redirection does not work, use the button below.</p>
+		<a href="https://gyanpath.up.railway.app/">Open GyanPath</a>
+	</main>
 	<script>
-		window.location.replace(`frontend/pages/index.html${window.location.search}${window.location.hash}`);
+		const destination = "https://gyanpath.up.railway.app/";
+		window.location.replace(`${destination}${window.location.search}${window.location.hash}`);
 	</script>
-	<a href="frontend/pages/index.html">Open GyanPath</a>
 </body>
 </html>
