@@ -40,21 +40,52 @@ function absoluteUrl(value: string) {
 	return `${env.siteUrl}${value.startsWith("/") ? "" : "/"}${value}`;
 }
 
+function replaceOrInsertHeadTag(html: string, pattern: RegExp, tag: string) {
+	if (pattern.test(html)) return html.replace(pattern, tag);
+	return html.replace(/<\/head>/i, `\t${tag}\n</head>`);
+}
+
+function imageMimeType(image: string, configuredType?: string | null) {
+	if (configuredType?.startsWith("image/")) return configuredType;
+	const pathname = image.split(/[?#]/, 1)[0].toLowerCase();
+	if (pathname.endsWith(".webp")) return "image/webp";
+	if (pathname.endsWith(".jpg") || pathname.endsWith(".jpeg")) return "image/jpeg";
+	if (pathname.endsWith(".svg")) return "image/svg+xml";
+	return "image/png";
+}
+
 async function sendPage(response: express.Response, filePath: string) {
 	let html = await readFile(filePath, "utf8");
 	const settings = await readLinkPreviewSettings();
 	if (settings.enabled) {
 		const image = settings.imageSource === "upload" && settings.imagePath
 			? absoluteUrl(settings.imagePath)
-			: settings.imageUrl;
+			: settings.imageUrl || "";
+		const imageType = imageMimeType(image, settings.imageMeta?.type);
+		const imageWidth = settings.imageMeta?.width || 1731;
+		const imageHeight = settings.imageMeta?.height || 909;
+		const imageAlt = "GyanPath study companion for IGNOU MCA students";
 		const replacements: [RegExp, string][] = [
+			[/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${escapeHtml(settings.url)}" />`],
 			[/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${escapeHtml(settings.title)}" />`],
 			[/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${escapeHtml(settings.description)}" />`],
+			[/<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/i, '<meta property="og:type" content="website" />'],
 			[/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${escapeHtml(settings.url)}" />`],
-			[/<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image" content="${escapeHtml(image || "")}" />`],
-			[/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, '<meta name="twitter:card" content="summary_large_image" />']
+			[/<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image" content="${escapeHtml(image)}" />`],
+			[/<meta\s+property="og:image:secure_url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:secure_url" content="${escapeHtml(image)}" />`],
+			[/<meta\s+property="og:image:type"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:type" content="${imageType}" />`],
+			[/<meta\s+property="og:image:width"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:width" content="${imageWidth}" />`],
+			[/<meta\s+property="og:image:height"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:height" content="${imageHeight}" />`],
+			[/<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image:alt" content="${imageAlt}" />`],
+			[/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, '<meta name="twitter:card" content="summary_large_image" />'],
+			[/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${escapeHtml(settings.title)}" />`],
+			[/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${escapeHtml(settings.description)}" />`],
+			[/<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${escapeHtml(image)}" />`],
+			[/<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image:alt" content="${imageAlt}" />`]
 		];
-		for (const [pattern, replacement] of replacements) html = html.replace(pattern, replacement);
+		for (const [pattern, replacement] of replacements) {
+			html = replaceOrInsertHeadTag(html, pattern, replacement);
+		}
 	}
 	response.type("html").send(html);
 }

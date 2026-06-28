@@ -37,7 +37,7 @@ renderHeader(document.getElementById("app-header"), {
 if (!Array.isArray(window.STUDY_HELPER_THEMES)) {
 	await import("../utils/theme.js");
 }
-await import("../utils/page-preferences.js?v=4");
+await import("../utils/page-preferences.js?v=6");
 
 renderFooter(document.getElementById("app-footer"));
 renderBreadcrumb(body.dataset.page || "");

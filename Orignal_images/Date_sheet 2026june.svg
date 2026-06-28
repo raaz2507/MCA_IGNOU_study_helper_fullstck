@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+    <title id="title">Date sheet announcement illustration</title>
+    <desc id="desc">A schedule board and clock on a purple background with integrated date sheet table.</desc>
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#42237c"/>
+            <stop offset="1" stop-color="#a64fd4"/>
+        </linearGradient>
+    </defs>
+    
+    <rect width="1200" height="650" fill="url(#bg)"/>
+    <path d="M0 580C250 475 425 680 680 555s350-85 520-5v100H0z" fill="#26134f" opacity=".34"/>
+    
+    <g transform="translate(60, 40)">
+        <circle cx="105" cy="105" r="103" fill="#1e123d" opacity=".32"/>
+        <circle cx="90" cy="90" r="88" fill="#f5f1ff"/>
+        <circle cx="90" cy="90" r="68" fill="#fff" stroke="#d9c7ee" stroke-width="4"/>
+        <path d="M90 90V43M90 90l37 22" fill="none" stroke="#65309a" stroke-width="11" stroke-linecap="round"/>
+        <circle cx="90" cy="90" r="9" fill="#ff9f1c"/>
+    </g>
+    
+    <g transform="translate(250, 40)">
+        <rect x="15" y="15" width="900" height="540" rx="20" fill="#251246" opacity=".32"/>
+        <rect width="900" height="540" rx="20" fill="#fff"/>
+        
+        <rect width="900" height="70" rx="20" fill="#ffb12b"/>
+        <rect y="50" width="900" height="20" fill="#ffb12b"/>
+        
+        <text x="450" y="45" fill="#251246" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle">PROGRAMME TERM-END PRACTICAL EXAMINATION</text>
+        
+        <foreignObject x="20" y="90" width="860" height="430">
+            <xmlns xmlns="http://www.w3.org/1999/xhtml">
+                <style>
+                    .ds-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-family: Arial, sans-serif;
+                        font-size: 13px;
+                        color: #333;
+                    }
+                    .ds-table th {
+                        background-color: #7b3db5;
+                        color: white;
+                        font-weight: bold;
+                        padding: 10px 6px;
+                        text-align: center;
+                    }
+                    .ds-table td {
+                        padding: 8px 6px;
+                        border-bottom: 1px solid #e0d5ed;
+                        text-align: center;
+                    }
+                    .ds-table tr:nth-child(even) {
+                        background-color: #fafdff;
+                    }
+                    .ds-table tr:hover {
+                        background-color: #f1e8f9;
+                    }
+                    .highlight-prog {
+                        font-weight: bold;
+                        color: #7b3db5;
+                    }
+                    .highlight-code {
+                        font-weight: bold;
+                        color: #e67e22;
+                    }
+                </style>
+                <table class="ds-table">
+                    <thead>
+                        <tr>
+                            <th>Sl. No.</th>
+                            <th>Date &amp; Day</th>
+                            <th>Programme</th>
+                            <th>Course Code</th>
+                            <th>09:00 am<br/>To 11:00 am</th>
+                            <th>11:00 am<br/>To 01:00 pm</th>
+                            <th>02:00 pm<br/>To 04:00 pm</th>
+                            <th>04:00 pm<br/>To 06:00 pm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>28.07.2026 (Tuesday)</td>
+                            <td class="highlight-prog">MCA_New</td>
+                            <td class="highlight-code">MCSL216</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>29.07.2026 (Wednesday)</td>
+                            <td class="highlight-prog">MCA_New</td>
+                            <td class="highlight-code">MCSL217</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>30.07.2026 (Thursday)</td>
+                            <td class="highlight-prog">MCA_New</td>
+                            <td class="highlight-code">MCSL222</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>31.07.2026 (Friday)</td>
+                            <td class="highlight-prog">MCA_New</td>
+                            <td class="highlight-code">MCSL223</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>01.08.2026 (Saturday)</td>
+                            <td class="highlight-prog">MCA_New</td>
+                            <td class="highlight-code">MCSL228</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>03.08.2026 (Monday)</td>
+                            <td class="highlight-prog">MCA_New</td>
+                            <td class="highlight-code">MCSL229</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>04.08.2026 (Tuesday)</td>
+                            <td class="highlight-prog">MSCDSA</td>
+                            <td class="highlight-code">MCSL064</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>05.08.2026 (Wednesday)</td>
+                            <td class="highlight-prog">MSCDSA</td>
+                            <td class="highlight-code">MCSL065</td>
+                            <td>SET-I</td><td>SET-II</td><td>SET-III</td><td>SET-IV</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </xmlns>
+        </foreignObject>
+    </g>
+    
+    <g fill="#fff" opacity=".55">
+        <circle cx="110" cy="305" r="8"/>
+        <circle cx="120" cy="550" r="12"/>
+        <circle cx="1100" cy="105" r="6"/>
+    </g>
+</svg>

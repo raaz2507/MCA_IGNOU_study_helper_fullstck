@@ -172,6 +172,6 @@ import { getSubjects } from "../api/subjects.api.js";
 		container.append(section);
 	});
 
-	await import("../utils/page-preferences.js?v=3");
+	await import("../utils/page-preferences.js?v=6");
 	document.dispatchEvent(new CustomEvent("study-helper:subjects-rendered"));
 })();

@@ -18,6 +18,15 @@ function pdfPath(filePath: string | null) {
 	return normalized;
 }
 
+function previewPath(filePath: string | null) {
+	if (!filePath) return fallbackPreview;
+	const normalized = filePath.split("\\").join("/");
+	const markerIndex = normalized.indexOf("/assets/");
+	if (markerIndex >= 0) return normalized.slice(markerIndex);
+	if (normalized.startsWith("assets/")) return `/${normalized}`;
+	return normalized;
+}
+
 function shortSession(value: string) {
 	const monthYear = value.match(/\b(June|December|Dec)\s+(\d{4})\b/i);
 	if (monthYear) return `${monthYear[2]} ${monthYear[1].toLowerCase().startsWith("dec") ? "Dec" : "June"}`;
@@ -87,7 +96,7 @@ export const catalogDatabaseService = {
 			session: shortSession(paper.session),
 			english: pdfPath(paper.englishPath),
 			hindi: pdfPath(paper.hindiPath),
-			preview: fallbackPreview,
+			preview: previewPath(paper.previewPath),
 			fileName: paper.fileName,
 			pages: paper.pageCount,
 			size: paper.fileSize,

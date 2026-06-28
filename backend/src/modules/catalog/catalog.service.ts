@@ -1,4 +1,5 @@
-﻿import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { env } from "../../config/env.js";
 
@@ -104,8 +105,15 @@ function slug(value: string) {
 	return value.toLowerCase().replace(/-hi$/i, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 55);
 }
 
-function previewFor(_file: string) {
-	return fallbackPreview;
+function previewFor(file: string) {
+	const readable = slug(path.parse(file).name);
+	const source = path.relative(env.projectRoot, path.resolve(file)).split(path.sep).join("/");
+	const digest = createHash("sha1").update(source).digest("hex").slice(0, 8);
+	const fileName = `${readable}-${digest}.webp`;
+	const cachedPreview = path.join(env.frontendRoot, "assets", "images", "pdf-gallery-cache", fileName);
+	return existsSync(cachedPreview)
+		? `/assets/images/pdf-gallery-cache/${fileName}`
+		: fallbackPreview;
 }
 
 function htmlViewer(examFolder: string) {

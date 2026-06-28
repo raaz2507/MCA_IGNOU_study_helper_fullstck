@@ -52,7 +52,8 @@
 		link.rel = "noopener";
 	});
 
-	document.querySelectorAll(".books").forEach((books, index) => {
+	function initializeStudyMaterialToggles() {
+		document.querySelectorAll(".books").forEach((books, index) => {
 		if (books.querySelector(":scope > .books-toggle")) return;
 
 		const blocks = [...books.querySelectorAll(":scope > section")];
@@ -94,7 +95,14 @@
 		books.classList.add("is-collapsible");
 		books.prepend(button);
 		books.append(content);
-	});
+		});
+	}
+
+	initializeStudyMaterialToggles();
+	document.addEventListener(
+		"study-helper:subjects-rendered",
+		initializeStudyMaterialToggles
+	);
 
 	function createSectionId(text, fallback) {
 		const slug = text
@@ -254,6 +262,45 @@
 				group.append(childNav);
 			}
 
+			const directCards = [
+				...section.querySelectorAll(":scope > .cardContainer > .card")
+			];
+
+			if (!childSections.length && directCards.length) {
+				const resourceNav = document.createElement("div");
+				resourceNav.className = "sidebar-subnav sidebar-subject-nav";
+				resourceNav.id = `${section.id}-sidebar-resources`;
+
+				const resourceToggle = document.createElement("button");
+				resourceToggle.type = "button";
+				resourceToggle.className = "sidebar-disclosure-toggle";
+				resourceToggle.setAttribute("aria-label", `Collapse ${title}`);
+				resourceToggle.setAttribute("aria-expanded", "true");
+				resourceToggle.setAttribute("aria-controls", resourceNav.id);
+				resourceToggle.innerHTML = '<span aria-hidden="true"></span>';
+				mainRow.append(resourceToggle);
+
+				directCards.forEach((card, cardIndex) => {
+					const resourceTitle = card.querySelector(":scope > h3")?.textContent.trim();
+					if (!resourceTitle) return;
+
+					card.id ||= `${section.id}-${createSectionId(
+						resourceTitle,
+						`resource-${cardIndex + 1}`
+					)}`;
+
+					const resourceLink = document.createElement("a");
+					resourceLink.className =
+						"sidebar-link sidebar-sub-link sidebar-subject-link sidebar-resource-link";
+					resourceLink.href = `#${card.id}`;
+					resourceLink.textContent = resourceTitle;
+					resourceNav.append(resourceLink);
+					observedSections.push(card);
+				});
+
+				group.append(resourceNav);
+			}
+
 			nav.append(group);
 		});
 
@@ -346,9 +393,25 @@
 		updateActiveLink();
 	}
 
-	if (document.querySelector("#semesterContainer > section.semester")) {
+	function tryBuildSidebar() {
+		const subjectsReady = Boolean(
+			document.querySelector("#semesterContainer > section.semester")
+		);
+		const collectionsReady =
+			document.body.dataset.page !== "resources" ||
+			document.body.dataset.resourceCollectionsReady === "true";
+
+		if (!subjectsReady || !collectionsReady) return false;
 		buildSidebar();
-	} else {
-		document.addEventListener("study-helper:subjects-rendered", buildSidebar, { once: true });
+		return true;
+	}
+
+	if (!tryBuildSidebar()) {
+		document.addEventListener("study-helper:subjects-rendered", tryBuildSidebar, { once: true });
+		document.addEventListener(
+			"study-helper:resource-collections-rendered",
+			tryBuildSidebar,
+			{ once: true }
+		);
 	}
 })();

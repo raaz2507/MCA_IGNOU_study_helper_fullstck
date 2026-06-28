@@ -3,7 +3,7 @@
 const grid = document.getElementById("contributorsGrid");
 const emptyState = document.getElementById("contributorsEmpty");
 const defaultContributorAvatars = {
-	rajaanha: "/assets/images/contributors/rajaanha-guinea-pig.png"
+	rajaanha: "/assets/images/contributors/rajaanha-guinea-pig.webp"
 };
 
 function contributorCard(contributor) {

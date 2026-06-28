@@ -84,5 +84,6 @@ function renderCollection(section, files, emptyText) {
 		if (!section) return;
 		renderCollection(section, data[collection.key] || [], collection.emptyText);
 	});
-	document.dispatchEvent(new CustomEvent("study-helper:subjects-rendered"));
+	document.body.dataset.resourceCollectionsReady = "true";
+	document.dispatchEvent(new CustomEvent("study-helper:resource-collections-rendered"));
 })();
