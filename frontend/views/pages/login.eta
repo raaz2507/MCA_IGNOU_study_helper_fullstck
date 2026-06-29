@@ -1,0 +1,54 @@
+<% layout('../layouts/main') %>
+
+	<main class="login-page">
+		<section class="login-card">
+			<form id="loginForm" class="login-form">
+				<label for="username">Username or Student ID</label>
+				<input
+					id="username"
+					name="username"
+					type="text"
+					autocomplete="username"
+					placeholder="Enter your username"
+					aria-describedby="usernameHelp"
+					required
+				/>
+				<small id="usernameHelp" class="field-help">Use the username provided with your account.</small>
+
+				<label for="password">Password</label>
+				<div class="password-input-wrap">
+					<input
+						id="password"
+						name="password"
+						type="password"
+						autocomplete="current-password"
+						placeholder="Enter your password"
+						aria-describedby="passwordHelp"
+						required
+					/>
+					<button
+						id="passwordToggle"
+						class="password-toggle"
+						type="button"
+						aria-label="Show password"
+						aria-controls="password"
+						aria-pressed="false"
+					>
+						<span class="password-eye" aria-hidden="true"></span>
+					</button>
+				</div>
+				<small id="passwordHelp" class="field-help">Password is case-sensitive.</small>
+
+				<button type="submit">Login</button>
+				<p id="loginMessage" class="login-message" aria-live="polite"></p>
+				<p class="login-signup-prompt">
+					New to GyanPath?
+					<a href="/#signup">Create an account</a>
+				</p>
+			</form>
+
+		</section>
+	</main>
+
+
+

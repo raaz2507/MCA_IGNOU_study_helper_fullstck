@@ -1,0 +1,16 @@
+<% layout('../layouts/main') %>
+	<header class="viewer-header">
+		<div class="title-area">
+			<button id="backButton" class="control-button" type="button" aria-label="Go back">&larr; Back</button>
+			<div><p class="eyebrow">Study Reader</p><h1 id="documentTitle">PDF Reader</h1></div>
+		</div>
+		<div class="controls" aria-label="PDF reader controls">
+			<div class="control-group" aria-label="Language"><span class="group-label">Language</span><button id="englishButton" class="control-button language-button active" type="button">English</button><button id="hindiButton" class="control-button language-button" type="button">Hindi</button></div>
+			<div class="control-group" aria-label="Reading theme"><span class="group-label">Theme</span><div class="theme-switcher" role="group" aria-label="Choose reader theme"></div></div>
+			<div class="control-group actions" aria-label="Viewer actions"><button id="fullscreenButton" class="control-button" type="button">Fullscreen</button><a id="downloadButton" class="control-button" href="#" download>Download</a></div>
+		</div>
+	</header>
+	<main id="viewerArea" class="viewer-area">
+		<div id="emptyState" class="empty-state" hidden><h2>PDF not found</h2><p>Add a valid English or Hindi PDF path to the viewer link.</p></div>
+		<iframe id="pdfFrame" title="PDF document reader"></iframe>
+	</main>

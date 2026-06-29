@@ -77,51 +77,11 @@ function updateSupportSection(container, settings) {
 	}
 }
 
-export function renderFooter(container) {
+export function enhanceFooter(container) {
 	if (!container) return;
 
 	const hasServerMarkup = Boolean(container.querySelector(".site-footer"));
-	if (!hasServerMarkup) container.innerHTML = `
-		<footer class="site-footer">
-			<div>
-				<strong>GyanPath</strong>
-				<p>Question papers, practicals and study material in one place.</p>
-				<p class="footer-disclaimer">This is an independent study helper, not an official IGNOU application.</p>
-			</div>
-			<section class="share-gyanpath" aria-labelledby="shareGyanPathTitle">
-				<img data-share-qr hidden alt="QR code to open GyanPath" width="112" height="112" />
-				<div>
-					<strong id="shareGyanPathTitle">Share GyanPath</strong>
-					<p data-share-description>Scan the QR code or share it with another MCA student.</p>
-					<div class="share-links">
-						<a data-share-whatsapp href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-						<a data-share-telegram href="#" target="_blank" rel="noopener noreferrer">Telegram</a>
-					</div>
-				</div>
-			</section>
-			<section class="donation-section" aria-labelledby="donationTitle" data-support-section hidden>
-				<div class="donation-icon" aria-hidden="true">Rs</div>
-				<img data-support-qr hidden alt="QR code to support GyanPath" width="112" height="112" />
-				<div>
-					<strong id="donationTitle">Support GyanPath</strong>
-					<p data-support-description>Your donation helps keep IGNOU MCA resources organized, updated and free for students.</p>
-					<a data-support-action class="donation-button donation-button-disabled" target="_blank" rel="noopener noreferrer" aria-disabled="true">Donation details coming soon</a>
-				</div>
-			</section>
-			<nav class="footer-navigation" aria-label="Footer navigation">
-				<a href="/">Home</a>
-				<a href="/resources">Resources</a>
-				<a href="/discussion">Discussion</a>
-				<a href="/about">About</a>
-				<a href="/user-guide">User Guide</a>
-				<a href="/dashboard">Dashboard</a>
-			</nav>
-			<div class="footer-credit-strip">Developed by <strong>Rajaanha</strong>.</div>
-		</footer>`;
-	if (!hasServerMarkup) {
-		updateShareLinks(container, defaultShareSettings);
-		updateSupportSection(container, defaultSupportSettings);
-	}
+	if (!hasServerMarkup) return;
 	fetch("/api/share-settings")
 		.then((response) => response.ok ? response.json() : null)
 		.then((settings) => {

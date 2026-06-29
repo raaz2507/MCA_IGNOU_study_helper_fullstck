@@ -1,0 +1,7 @@
+<% layout('../layouts/main') %>
+	<main class="info-page">
+		<section class="info-card">
+			<h2>Real-time chat</h2>
+			<p id="chatEmpty"></p>
+		</section>
+	</main>

@@ -1,6 +1,8 @@
-<header class="site-header">
+<% const dashboardHeader = it.shell.variant === 'dashboard'; %>
+<header class="site-header<% if (it.shell.variant) { %> <%= it.shell.variant %>-header<% } %>">
 	<div class="header-content">
 		<div class="header-title">
+			<% if (it.shell.label) { %><p class="dashboard-label"><%= it.shell.label %></p><% } %>
 			<h1>
 			<% if (it.shell.title === 'GyanPath') { %>
 				<span class="brand-wordmark" aria-label="GyanPath">
@@ -12,10 +14,21 @@
 				</span>
 			<% } else { %><%= it.shell.title %><% } %>
 			</h1>
-			<% if (it.shell.title !== 'GyanPath') { %><p><%= it.shell.subtitle %></p><% } %>
+			<% if (it.shell.title !== 'GyanPath') { %><p><% if (it.shell.action === 'dashboard') { %>Welcome <strong data-user-name></strong> (<span data-user-role></span>).<% } else { %><%= it.shell.subtitle %><% } %></p><% } %>
 		</div>
 		<div class="header-actions">
 			<div class="theme-switcher" role="group" aria-label="Choose page theme"></div>
+			<% if (it.shell.action === 'dashboard') { %>
+			<div class="protected-actions">
+				<a href="/admin" data-visible-for="admin">Admin Page</a>
+				<button type="button" class="logout-button" data-logout>Logout</button>
+			</div>
+			<% } else if (it.shell.action === 'logout') { %>
+			<div class="protected-actions">
+				<a href="/dashboard">Dashboard</a>
+				<button type="button" class="logout-button" data-logout>Logout</button>
+			</div>
+			<% } else if (!dashboardHeader) { %>
 			<div class="header-account" data-account-guest>
 				<span>Welcome, <strong>Guest</strong></span>
 				<a class="primary-link" href="/login">Login</a>
@@ -28,7 +41,8 @@
 				<a href="/admin" data-visible-for="admin" hidden>Admin</a>
 				<button type="button" class="logout-button" data-logout>Logout</button>
 			</div>
+			<% } %>
 		</div>
 	</div>
-	<%~ include('./nav', it) %>
+	<% if (!dashboardHeader) { %><%~ include('./nav', it) %><% } %>
 </header>

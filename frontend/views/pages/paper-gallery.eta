@@ -1,0 +1,45 @@
+<% layout('../layouts/main') %>
+	<header class="library-header">
+		<a class="back-link" href="/">← Home</a>
+		<div>
+			<p class="eyebrow">IGNOU MCA Study Helper</p>
+			<h1 id="galleryTitle">Question Papers</h1>
+			<p>Select a card to open the question paper.</p>
+		</div>
+	</header>
+	<main>
+		<section class="library-toolbar" aria-label="PDF library summary">
+			<div><strong id="fileCount">0</strong><span>PDF cards</span></div>
+			<label>
+				<span>Search files</span>
+				<input id="searchInput" type="search" placeholder="June 2024, December..." />
+			</label>
+		</section>
+		<section id="pdfGrid" class="pdf-grid" aria-live="polite"></section>
+		<div id="emptyLibrary" class="empty-library" hidden>
+			<h2>No PDF cards found</h2>
+		</div>
+	</main>
+	<template id="pdfCardTemplate">
+		<article class="pdf-card">
+			<a class="preview-link" target="_blank" rel="noopener">
+				<img class="pdf-preview" loading="lazy" alt="" />
+				<span class="open-overlay">Open in PDF Reader ↗</span>
+			</a>
+			<div class="card-content">
+				<div class="card-tags">
+					<span class="subject-tag"></span>
+					<span class="language-tag"></span>
+				</div>
+				<h2 class="pdf-title"></h2>
+				<p class="file-name"></p>
+				<dl class="file-details">
+					<div><dt>Exam</dt><dd class="exam-session"></dd></div>
+					<div><dt>Pages</dt><dd class="page-count"></dd></div>
+					<div><dt>Size</dt><dd class="file-size"></dd></div>
+					<div><dt>Updated</dt><dd class="updated-date"></dd></div>
+				</dl>
+				<a class="open-button" target="_blank" rel="noopener">Read PDF ↗</a>
+			</div>
+		</article>
+	</template>

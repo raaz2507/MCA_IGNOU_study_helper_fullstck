@@ -1,0 +1,15 @@
+<% layout('../layouts/main') %>
+	<main class="lecture-page">
+		<section class="section-heading lecture-page-heading">
+			<p class="dashboard-label">Online Learning</p>
+			<h1 id="lecturePageTitle">Video Lectures</h1>
+			<p id="lecturePageSubtitle">Published lectures for all MCA subjects.</p>
+		</section>
+		<section class="lecture-toolbar" aria-label="Lecture filters">
+			<label><span>Search lectures</span><input id="lectureSearch" type="search" placeholder="Title, unit or teacher..." /></label>
+			<label><span>Language</span><select id="lectureLanguageFilter">
+				<option value="">All languages</option><option>Hindi</option><option>English</option><option>Hindi + English</option>
+			</select></label>
+		</section>
+		<section id="lectureGrid" class="lecture-grid" aria-live="polite"></section>
+	</main>

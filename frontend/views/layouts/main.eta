@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="<%= it.meta.lang || 'en' %>">
 <%~ include('../partials/head', it) %>
-<body data-page="<%= it.shell.activePage %>" data-header-title="<%= it.shell.title %>" data-header-subtitle="<%= it.shell.subtitle %>">
-	<div id="app-header"><%~ include('../partials/header', it) %></div>
+<body<% if (it.pageBody?.className) { %> class="<%= it.pageBody.className %>"<% } %> data-page="<%= it.shell.activePage %>"<% if (it.pageBody?.allowedRoles) { %> data-allowed-roles="<%= it.pageBody.allowedRoles %>"<% } %><% if (it.pageBody?.viewerPath) { %> data-viewer-path="<%= it.pageBody.viewerPath %>"<% } %>>
+	<% if (it.shell.includeHeader !== false) { %><div id="app-header"><%~ include('../partials/header', it) %></div><% } %>
 	<%~ it.body %>
-	<div id="app-footer"><%~ include('../partials/footer', it) %></div>
+	<% if (it.shell.includeFooter !== false) { %><div id="app-footer"><%~ include('../partials/footer', it) %></div><% } %>
 	<% for (const script of it.scripts || []) { %>
 	<script<% if (script.module) { %> type="module"<% } %> src="<%= script.src %>"></script>
 	<% } %>

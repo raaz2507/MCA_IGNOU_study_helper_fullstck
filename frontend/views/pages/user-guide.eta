@@ -1,0 +1,14 @@
+<% layout('../layouts/main') %>
+	<main class="info-page">
+		<article class="info-card">
+			<h2>Getting Started</h2>
+			<ol>
+				<li>Open the Home page and choose your semester.</li>
+				<li>Select Theory Papers, Practical Papers or Assignments.</li>
+				<li>Use a subject card to open exam papers, the HTML viewer or the question bank.</li>
+				<li>Use the left sidebar to jump between sections quickly.</li>
+			</ol>
+			<h2>Reading Preferences</h2>
+			<p>Use the theme buttons in the header. Your selected theme is saved automatically.</p>
+		</article>
+	</main>

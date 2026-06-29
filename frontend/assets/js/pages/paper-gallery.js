@@ -22,7 +22,7 @@ import { getPapers } from "../api/papers.api.js";
 	const searchInput = document.getElementById("searchInput");
 	const fileCount = document.getElementById("fileCount");
 	const galleryTitle = document.getElementById("galleryTitle");
-	const viewerPath = window.PDF_GALLERY_CONFIG?.viewer || "/pdf-viewer";
+	const viewerPath = document.body.dataset.viewerPath || "/pdf-viewer";
 
 	if (galleryTitle) {
 		galleryTitle.textContent = subject ? `${subject} Question Papers` : "Question Papers";

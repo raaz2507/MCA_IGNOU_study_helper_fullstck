@@ -1,0 +1,9 @@
+<% layout('../layouts/main') %>
+	<main class="login-page">
+		<section class="login-card access-message">
+			<h1>Access Denied</h1>
+			<p>Your account does not have permission to open this page.</p>
+			<a class="primary-link" href="/">Return Home</a>
+			<a class="secondary-link" href="/login">Login with another account</a>
+		</section>
+	</main>

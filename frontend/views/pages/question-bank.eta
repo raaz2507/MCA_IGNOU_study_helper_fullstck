@@ -1,0 +1,34 @@
+<% layout('../layouts/main') %>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo"><img src="/assets/images/brand/site-logo.png" alt="Learn &amp; Grow Create" /></div>
+    </div>
+    <h1 id="subjectCode">Loading...</h1>
+    <p id="subjectTitle">Question Bank</p>
+    <!-- <h1>MCS-211</h1><p>Design & Analysis of Algorithms</p></div></div> -->
+    <button class="nav active" data-view="all">▦ All Questions</button>
+    <button class="nav" data-view="repeated">★ Most Repeated</button>
+    <button class="nav" data-view="bookmarks">🔖 Bookmarks</button>
+    <button class="nav" data-view="revision">🧠 Revision List</button>
+    <button class="nav" data-view="completed">✓ Completed</button>
+    <div class="stats"><h3>Quick Stats</h3><p>Total Questions <b id="totalQ">0</b></p><p>Completed <b id="doneQ">0</b></p><p>Bookmarks <b id="bookQ">0</b></p><div class="bar"><span id="progressBar"></span></div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><h2>Question Bank</h2><p id="subtitle">All Questions</p></div>
+      <div class="actions"><button id="langEn" class="pill active">English</button><button id="langHi" class="pill">Hinglish</button><button id="themeBtn" class="icon">☾</button></div>
+    </header>
+    <section class="filters">
+      <input id="searchBox" placeholder="Search question, topic, year..." />
+      <select id="sortBy"><option value="default">Default Order</option><option value="repeated">Most Repeated</option><option value="marks">Highest Marks</option><option value="latest">Latest First</option><option value="oldest">Oldest First</option></select>
+      <select id="marksFilter"><option value="all">All Marks</option><option value="5">5 Marks</option><option value="10">10 Marks</option></select>
+      <select id="difficultyFilter"><option value="all">All Difficulty</option><option>Easy</option><option>Medium</option><option>Hard</option></select>
+      <button id="resetBtn">Reset</button>
+    </section>
+
+    <section class="workspace">
+      <div class="listPanel"><div class="listHeader"><b id="countText">0 Questions</b></div><div id="questionList" class="questionList"></div></div>
+      <article class="detailPanel" id="detailPanel"><div class="empty">Select a question to view answer.</div></article>
+    </section>
+  </main>

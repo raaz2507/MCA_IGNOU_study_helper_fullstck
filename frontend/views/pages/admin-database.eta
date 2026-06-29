@@ -1,0 +1,58 @@
+<% layout('../layouts/main') %>
+
+	<div class="dashboard-layout admin-layout">
+		<aside class="dashboard-section-nav" aria-label="Database backup sections">
+			<strong>Database Tools</strong>
+			<nav>
+				<a href="/admin">Admin Overview</a>
+				<a href="#databaseExport">Export</a>
+				<a href="#databaseRestore">Restore</a>
+				<a href="#uploadStorage">Move Images</a>
+			</nav>
+		</aside>
+
+		<main class="dashboard-page admin-page">
+			<section id="databaseExport" class="dashboard-panel">
+				<div class="section-heading">
+					<p class="dashboard-label">Backup</p>
+					<h2>Export ZIP Backup</h2>
+					<p>Downloads users, resources, settings, progress, discussions, analytics records and uploaded images.</p>
+				</div>
+				<form id="databaseBackupForm" class="admin-retention-form">
+					<div class="admin-form-actions">
+						<button id="downloadDatabaseBackup" class="logout-button" type="button">Download Backup</button>
+					</div>
+				</form>
+			</section>
+
+			<section id="databaseRestore" class="dashboard-panel">
+				<div class="section-heading">
+					<p class="dashboard-label">Restore</p>
+					<h2>Analyse and Restore Backup</h2>
+					<p>Analyse first, review matches and conflicts, then restore from a trusted GyanPath ZIP or JSON backup.</p>
+				</div>
+				<form id="databaseRestoreForm" class="admin-retention-form">
+					<label><span>Backup file</span><input id="databaseRestoreFile" type="file" accept="application/zip,application/json,.zip,.json" required /></label>
+					<div id="databaseRestorePreview" class="admin-system-grid" hidden></div>
+					<label class="admin-checkbox-field"><input id="databaseRestoreConfirm" type="checkbox" required disabled /><span>I reviewed the analysis and understand this will replace current database records and uploaded files with matching backup paths.</span></label>
+					<div class="admin-form-actions">
+						<button id="analyzeDatabaseBackup" class="secondary-button" type="button">Analyse Backup</button>
+						<button id="restoreDatabaseBackupButton" class="admin-danger-button" type="submit" disabled>Restore Backup</button>
+					</div>
+				</form>
+				<p id="databaseBackupMessage" class="admin-message" aria-live="polite"></p>
+			</section>
+
+			<section id="uploadStorage" class="dashboard-panel">
+				<div class="section-heading">
+					<p class="dashboard-label">Storage</p>
+					<h2>Step 1: Move Old Images</h2>
+					<p>Moves old uploaded QR, link preview, banner and contributor image files into structured folders. Database paths are not changed in this step.</p>
+				</div>
+				<div class="admin-form-actions">
+					<button id="moveOldUploadImages" class="secondary-button" type="button">Move Old Images</button>
+				</div>
+				<p id="uploadStorageMessage" class="admin-message" aria-live="polite"></p>
+			</section>
+		</main>
+	</div>

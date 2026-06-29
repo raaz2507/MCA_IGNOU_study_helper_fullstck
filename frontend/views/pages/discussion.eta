@@ -1,0 +1,7 @@
+<% layout('../layouts/main') %>
+	<main class="info-page">
+		<section class="info-card">
+			<h2>Discussion rooms</h2>
+			<p id="discussionEmpty"></p>
+		</section>
+	</main>

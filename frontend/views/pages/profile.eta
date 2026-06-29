@@ -1,0 +1,24 @@
+<% layout('../layouts/main') %>
+	<main class="info-page">
+		<section class="info-card">
+			<h2>Edit Profile</h2>
+			<form id="profileForm" class="profile-form">
+				<label>Username<input id="profileUsername" disabled /></label>
+				<label>Display name<input id="profileDisplayName" required minlength="2" /></label>
+				<label>Email<input id="profileEmail" type="email" required /></label>
+				<label>Role<input id="profileRole" disabled /></label>
+				<button type="submit">Save Profile</button>
+				<p id="profileMessage" class="login-message" aria-live="polite"></p>
+			</form>
+		</section>
+		<section class="info-card">
+			<h2>Change Password</h2>
+			<form id="passwordForm" class="profile-form">
+				<label>Current password<input id="currentPassword" type="password" autocomplete="current-password" required /></label>
+				<label>New password<input id="newPassword" type="password" minlength="8" autocomplete="new-password" required /></label>
+				<label>Confirm new password<input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required /></label>
+				<button type="submit">Update Password</button>
+				<p id="passwordMessage" class="login-message" aria-live="polite"></p>
+			</form>
+		</section>
+	</main>
