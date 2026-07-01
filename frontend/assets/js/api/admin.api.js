@@ -132,6 +132,8 @@ export const getAdminReports = () => apiRequest("/admin/reports");
 export const reviewAdminReport = (id, review) =>
 	apiRequest(`/admin/reports/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(review) });
 export const getAdminAuditLogs = () => apiRequest("/admin/audit-logs");
+export const syncGitHubAcademicContent = () =>
+	apiRequest("/admin/content-sync/github", { method: "POST" });
 export const moveOldUploadImages = () =>
 	apiRequest("/admin/uploads/move-old-images", { method: "POST" });
 export const previewDatabaseRestore = (backup) => {

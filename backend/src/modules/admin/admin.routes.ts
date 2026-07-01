@@ -54,6 +54,7 @@ import {
 	resetUserPassword,
 	refreshShareQrImage,
 	refreshSupportQrImage,
+	syncGitHubAcademicContent,
 	uploadSettingQrImage
 } from "./admin.controller.js";
 
@@ -90,7 +91,8 @@ adminRouter.use(
 		"/assignments/:id",
 		"/reports",
 		"/reports/:id",
-		"/audit-logs"
+		"/audit-logs",
+		"/content-sync/github"
 	],
 	...requireRoles(UserRole.ADMIN, UserRole.EDITOR)
 );
@@ -120,6 +122,7 @@ adminRouter.delete("/assignments/:id", deleteAssignment);
 adminRouter.get("/reports", listReports);
 adminRouter.patch("/reports/:id", reviewReport);
 adminRouter.get("/audit-logs", listAuditLogs);
+adminRouter.post("/content-sync/github", syncGitHubAcademicContent);
 adminRouter.get(
 	"/settings/link-preview",
 	...requireRoles(UserRole.ADMIN, UserRole.EDITOR),

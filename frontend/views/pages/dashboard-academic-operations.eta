@@ -5,6 +5,7 @@
 			<strong>Dashboard Sections</strong>
 			<nav>
 				<a href="#adminOperations">Editor</a>
+				<a href="#githubContentSync">GitHub Sync</a>
 				<a href="#academicRecords">Academic Records</a>
 			</nav>
 		</aside>
@@ -69,6 +70,18 @@
 					</form>
 				</div>
 				<p id="adminOperationsMessage" class="admin-message" aria-live="polite"></p>
+			</section>
+
+			<section id="githubContentSync" class="dashboard-panel management-list-panel" aria-labelledby="githubContentSyncTitle">
+				<div class="section-heading">
+					<p class="dashboard-label">Automatic discovery</p>
+					<h2 id="githubContentSyncTitle">GitHub Content Sync</h2>
+					<p>Scan the configured GitHub PDF repository and add or update discovered semesters, subjects, papers and study material.</p>
+				</div>
+				<div class="admin-form-actions">
+					<button id="syncGitHubContent" class="logout-button" type="button">Sync GitHub Content</button>
+				</div>
+				<p id="githubContentSyncMessage" class="admin-message" aria-live="polite">Sync also runs once during each successful Railway deployment.</p>
 			</section>
 
 			<section id="academicRecords" class="dashboard-panel management-list-panel">

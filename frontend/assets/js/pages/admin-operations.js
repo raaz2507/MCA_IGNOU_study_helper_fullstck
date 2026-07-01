@@ -10,7 +10,8 @@ import {
 	reviewAdminReport,
 	saveAdminAssignment,
 	saveAdminSemester,
-	saveAdminSubject
+	saveAdminSubject,
+	syncGitHubAcademicContent
 } from "../api/admin.api.js";
 import { showToast } from "../utils/toast.js";
 
@@ -307,6 +308,22 @@ document.getElementById("cancelSemesterEdit")?.addEventListener("click", resetSe
 document.getElementById("cancelSubjectEdit")?.addEventListener("click", resetSubjectForm);
 document.getElementById("cancelAssignmentEdit")?.addEventListener("click", resetAssignmentForm);
 subjectSort?.addEventListener("change", renderSubjectRows);
+
+document.getElementById("syncGitHubContent")?.addEventListener("click", async (event) => {
+	const button = event.currentTarget;
+	const message = document.getElementById("githubContentSyncMessage");
+	button.disabled = true;
+	setMessage(message, "GitHub repository scan and database sync is running…", "info");
+	try {
+		const result = await syncGitHubAcademicContent();
+		setMessage(message, `Sync complete: ${result.subjects} subjects, ${result.papers} papers and ${result.studyMaterials} study materials found.`, "success");
+		await loadOperations();
+	} catch (error) {
+		setMessage(message, error.message, "error");
+	} finally {
+		button.disabled = false;
+	}
+});
 
 if (document.getElementById("adminOperations")) {
 	loadOperations().catch((error) => {

@@ -10,4 +10,9 @@ const result = spawnSync(process.execPath, [prismaCli, "migrate", "deploy", "--s
 	stdio: "inherit",
 	env: process.env
 });
+if (result.status === 0) {
+	const syncScript = path.join(projectRoot, "backend", "dist", "src", "infrastructure", "content", "sync-github-content.js");
+	const sync = spawnSync(process.execPath, [syncScript], { stdio: "inherit", env: process.env });
+	if (sync.status !== 0) console.warn("GitHub content sync failed; continuing server startup. Retry it from Academic Operations.");
+}
 process.exitCode = result.status ?? 1;

@@ -13,6 +13,7 @@ import { adminService } from "./admin.service.js";
 import { adminRepository } from "./admin.repository.js";
 import { dataSourceAudit } from "./data-source-audit.js";
 import { cleanupReplacedUpload, deleteUnreferencedUpload } from "../../shared/upload-cleanup.js";
+import { syncGitHubContent } from "../../infrastructure/content/sync-github-content.js";
 import {
 	analyticsRetentionSchema,
 	emailVerificationSettingsSchema,
@@ -1563,4 +1564,10 @@ export const reviewReport: RequestHandler = asyncHandler(async (request, respons
 
 export const listAuditLogs: RequestHandler = asyncHandler(async (_request, response) => {
 	response.json(await adminRepository.auditLogs());
+});
+
+export const syncGitHubAcademicContent: RequestHandler = asyncHandler(async (request, response) => {
+	const result = await syncGitHubContent();
+	await audit(String(request.user?.id), "GITHUB_CONTENT_SYNCED", "AcademicContent", undefined, result);
+	response.json(result);
 });

@@ -345,6 +345,56 @@ mca-study-helper/
 > Important: `.env` will contain local secrets and must not be
 > committed. A safe `.env.example` file should be committed instead.
 
+## Railway deployment and GitHub content sync
+
+Set these variables in the Railway service (do not commit production secrets):
+
+```env
+NODE_ENV=production
+DATABASE_ADAPTER=prisma
+DATABASE_PROVIDER=postgresql
+DATABASE_URL=postgresql://...
+FRONTEND_ORIGIN=https://your-service.up.railway.app
+SITE_URL=https://your-service.up.railway.app
+PDF_RESOURCE_BASE_URL=https://raw.githubusercontent.com/OWNER/REPOSITORY/BRANCH/MCA_new
+GITHUB_TOKEN=
+JWT_ACCESS_SECRET=use-a-long-random-secret
+JWT_REFRESH_SECRET=use-a-different-long-random-secret
+```
+
+`GITHUB_TOKEN` is optional for a public content repository, but recommended to avoid GitHub API rate limits. Give it read-only repository access. The application derives the repository, branch and content root from `PDF_RESOURCE_BASE_URL`.
+
+Use the repository's normal build and start commands:
+
+```text
+Build: npm run build
+Start: npm start
+```
+
+On each successful Railway deployment, startup performs this sequence once:
+
+1. Apply pending Prisma migrations.
+2. Scan the configured GitHub repository tree.
+3. Upsert discovered semester subjects, exam papers and study material.
+4. Start the web server.
+
+GitHub sync does not delete existing records, so manually managed academic records are preserved. A temporary GitHub failure is logged but does not prevent the server from starting.
+
+Admin and Editor users can retry without redeploying from **Dashboard → Academic Operations → GitHub Content Sync**. The equivalent Railway shell command is:
+
+```bash
+npm run content:sync:github
+```
+
+For a fresh database, deploy migrations before the first manual sync:
+
+```bash
+npm run prisma:deploy
+npm run content:sync:github
+```
+
+If Prisma reports `P1002` while acquiring an advisory lock, another deployment is already running migrations. Wait for that deployment to finish, then retry. If `/api/subjects` returns `[]`, verify `DATABASE_ADAPTER=prisma`, confirm that `PDF_RESOURCE_BASE_URL` points to the `MCA_new` folder, and run the manual sync command to see the GitHub error directly.
+
 Shared headers, footers and cards are rendered by reusable client-side
 components. Page files contain placeholders and page-specific content instead
 of repeating the same layout markup.

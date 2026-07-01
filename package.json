@@ -25,10 +25,11 @@
     "prisma:deploy:mysql": "prisma migrate deploy --schema backend/prisma/providers/mysql/schema.prisma",
     "prisma:deploy:sqlite": "prisma migrate deploy --schema backend/prisma/providers/sqlite/schema.prisma",
     "prisma:seed": "tsx backend/prisma/seed.ts",
-    "content:scan": "tsx backend/src/infrastructure/content/generate-content-manifest.ts"
-	,"firestore:migrate:dry-run": "tsx backend/src/infrastructure/database/firestore/migrate-from-prisma.ts"
-	,"firestore:migrate": "tsx backend/src/infrastructure/database/firestore/migrate-from-prisma.ts --execute"
-	,"firestore:verify": "tsx backend/src/infrastructure/database/firestore/verify-migration.ts"
+	"content:scan": "tsx backend/src/infrastructure/content/generate-content-manifest.ts",
+	"content:sync:github": "tsx backend/src/infrastructure/content/sync-github-content.ts",
+	"firestore:migrate:dry-run": "tsx backend/src/infrastructure/database/firestore/migrate-from-prisma.ts",
+	"firestore:migrate": "tsx backend/src/infrastructure/database/firestore/migrate-from-prisma.ts --execute",
+	"firestore:verify": "tsx backend/src/infrastructure/database/firestore/verify-migration.ts"
   },
   "engines": {
     "node": ">=22 <27"
